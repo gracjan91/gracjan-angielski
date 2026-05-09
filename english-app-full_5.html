@@ -1,0 +1,2640 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angielski by Gracjan</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f0e8;--surface:#ede8df;--card:#ffffff;--card2:#f9f5ef;
+  --border:#e0d8cc;--border2:#c8bfb0;
+  --accent:#c47a2b;--accent2:#7a9e6e;--accent3:#4a7fa5;--accent4:#c47a2b;
+  --text:#2c2416;--muted:#8a7a65;--muted2:#b0a090;
+  --green:#5a9e50;--red:#c0442a;--yellow:#c47a2b;--blue:#4a7fa5;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overscroll-behavior:none;}
+a{color:inherit;text-decoration:none;}
+
+/* ── BOTTOM NAV ── */
+.bnav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--surface);border-top:1px solid var(--border);box-shadow:0 -1px 0 var(--border);
+  display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0);
+}
+.bnav-tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:10px 4px 8px;cursor:pointer;transition:all .15s;
+  font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted);
+  letter-spacing:.04em;gap:3px;border:none;background:none;
+}
+.bnav-tab .icon{font-size:1.3rem;}
+.bnav-tab.active{color:var(--accent);}
+.bnav-tab.active .icon{filter:drop-shadow(0 0 4px rgba(196,122,43,.5));}
+
+/* ── PAGES ── */
+.page{display:none;padding-bottom:70px;min-height:100vh;}
+.page.active{display:block;}
+
+/* ── SHARED ── */
+.btn{
+  padding:9px 14px;border-radius:8px;border:1px solid var(--border);
+  background:var(--card);color:var(--text);font-family:'Space Mono',monospace;
+  font-size:.72rem;font-weight:700;cursor:pointer;transition:all .15s;
+  white-space:nowrap;letter-spacing:.03em;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent);}
+.btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-primary{
+  padding:13px 20px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--accent),#a06820);
+  color:#fff;font-family:'Lora',serif;font-size:.95rem;font-weight:900;
+  cursor:pointer;transition:opacity .15s;width:100%;
+}
+.btn-primary:hover{opacity:.88;}
+.tag{
+  display:inline-block;padding:2px 10px;border-radius:999px;
+  font-family:'Space Mono',monospace;font-size:.65rem;font-weight:700;
+}
+.loading-dots{display:inline-flex;gap:4px;align-items:center;}
+.loading-dots span{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:dp 1.2s ease-in-out infinite;}
+.loading-dots span:nth-child(2){animation-delay:.2s;}
+.loading-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes dp{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+
+/* ── HOME PAGE ── */
+.home-header{padding:28px 18px 0;}
+.home-streak{
+  display:flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,rgba(124,106,255,.15),rgba(255,106,158,.1));
+  border:1px solid rgba(124,106,255,.3);border-radius:14px;
+  padding:14px 18px;margin-bottom:20px;
+}
+.streak-fire{font-size:2rem;}
+.streak-info .streak-num{font-size:1.5rem;font-weight:900;color:var(--accent);font-family:'Space Mono',monospace;}
+.streak-info .streak-lbl{font-size:.72rem;color:var(--muted);font-family:'Space Mono',monospace;}
+.overall-progress{margin-bottom:20px;}
+.op-label{display:flex;justify-content:space-between;margin-bottom:6px;font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);}
+.op-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
+.op-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .5s;}
+.section-title{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;padding:0 18px;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 18px 20px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.05);}
+.stat-card .s-num{font-size:1.8rem;font-weight:900;font-family:'Space Mono',monospace;}
+.stat-card .s-lbl{font-size:.68rem;color:var(--muted);font-family:'Space Mono',monospace;margin-top:2px;}
+.continue-btn{margin:0 18px 20px;}
+
+/* ── GRAMMAR PAGE ── */
+.grammar-page{padding:18px;}
+.gpage-header{margin-bottom:20px;}
+.gpage-header h1{font-size:1.6rem;font-weight:900;}
+.gpage-header p{color:var(--muted);font-family:'Space Mono',monospace;font-size:.75rem;margin-top:4px;}
+.module-card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  margin-bottom:12px;overflow:hidden;
+}
+.module-header{
+  display:flex;align-items:center;gap:12px;padding:16px;cursor:pointer;
+  transition:background .15s;
+}
+.module-header:hover{background:var(--card2);}
+.module-icon{font-size:1.5rem;flex-shrink:0;}
+.module-info{flex:1;}
+.module-name{font-weight:600;font-size:.95rem;font-family:'Inter',sans-serif;}
+.module-meta{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);margin-top:3px;}
+.module-prog{
+  width:36px;height:36px;border-radius:50%;border:2px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Mono',monospace;font-size:.65rem;font-weight:700;flex-shrink:0;
+}
+.module-prog.done{border-color:var(--green);color:var(--green);}
+.module-lessons{display:none;border-top:1px solid var(--border);padding:8px 0;}
+.module-lessons.open{display:block;}
+.lesson-row{
+  display:flex;align-items:center;gap:12px;padding:10px 16px;
+  cursor:pointer;transition:background .15s;
+}
+.lesson-row:hover{background:var(--card2);}
+.lesson-status{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;}
+.lesson-status.done{background:var(--green);color:#000;}
+.lesson-status.active{background:var(--accent);color:#fff;}
+.lesson-status.locked{background:var(--border);color:var(--muted);}
+.lesson-title{font-size:.88rem;flex:1;}
+.lesson-xp{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--accent);}
+
+/* ── LESSON VIEW ── */
+.lesson-view{display:none;position:fixed;inset:0;background:var(--surface);z-index:200;overflow-y:auto;padding-bottom:80px;}
+.lesson-view.open{display:block;}
+.lv-header{
+  display:flex;align-items:center;gap:12px;padding:18px 16px;
+  border-bottom:1px solid var(--border);position:sticky;top:0;
+  background:var(--surface);z-index:10;border-bottom:1px solid var(--border);
+}
+.lv-back{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;flex-shrink:0;}
+.lv-title{flex:1;}
+.lv-title h2{font-size:1rem;font-weight:700;}
+.lv-title .lv-module{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);}
+.lv-xp{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--accent);}
+
+.lv-content{padding:20px 16px;}
+.lv-intro{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;
+}
+.lv-intro h3{font-size:1.2rem;font-weight:700;margin-bottom:8px;font-family:'Lora',serif;}
+.lv-intro p{font-size:.9rem;line-height:1.7;color:var(--text);font-family:'Lora',serif;}
+.lv-intro p+p{margin-top:10px;}
+.lv-intro .highlight{color:var(--accent3);font-weight:700;}
+.lv-intro .example-box{
+  background:var(--card2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;
+  padding:10px 14px;margin:12px 0;font-family:'Space Mono',monospace;font-size:.82rem;
+}
+.lv-intro .example-box .en{color:var(--accent3);}
+.lv-intro .example-box .pl{color:var(--muted);font-size:.75rem;margin-top:3px;}
+.lv-intro .example-box .de{color:rgba(106,255,212,.5);font-size:.75rem;margin-top:2px;}
+.lv-intro table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.82rem;}
+.lv-intro td,.lv-intro th{padding:7px 10px;border:1px solid var(--border);text-align:left;}
+.lv-intro th{background:var(--card2);font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);}
+.lv-intro .formula{
+  background:rgba(124,106,255,.1);border:1px solid rgba(124,106,255,.3);
+  border-radius:8px;padding:10px 14px;margin:10px 0;
+  font-family:'Space Mono',monospace;font-size:.82rem;color:var(--accent);
+}
+
+/* EXERCISES */
+.exercises-section h3{font-size:1rem;font-weight:700;margin-bottom:14px;font-family:'Space Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+.exercise{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:18px;margin-bottom:14px;
+}
+.ex-num{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted2);margin-bottom:8px;}
+.ex-question{font-size:1rem;font-weight:700;margin-bottom:14px;line-height:1.4;}
+.ex-question .blank{
+  display:inline-block;border-bottom:2px solid var(--accent);min-width:80px;
+  text-align:center;color:var(--accent);font-family:'Space Mono',monospace;
+}
+.ex-options{display:flex;flex-direction:column;gap:8px;}
+.ex-option{
+  padding:11px 14px;border-radius:10px;border:1px solid var(--border);
+  background:var(--card2);cursor:pointer;transition:all .15s;font-size:.9rem;
+  text-align:left;color:var(--text);font-family:'Lora',serif;
+}
+.ex-option:hover{border-color:var(--accent);}
+.ex-option.selected{border-color:var(--accent);background:rgba(124,106,255,.12);color:var(--accent);}
+.ex-option.correct{border-color:var(--green);background:rgba(77,240,160,.1);color:var(--green);}
+.ex-option.wrong{border-color:var(--red);background:rgba(255,77,106,.08);color:var(--red);}
+.ex-input{
+  width:100%;padding:11px 14px;background:var(--bg);border:2px solid var(--border);
+  border-radius:10px;color:var(--text);font-family:'Lora',serif;font-size:.95rem;
+  outline:none;transition:border-color .2s;
+}
+.ex-input:focus{border-color:var(--accent);}
+.ex-input.ok{border-color:var(--green);color:var(--green);}
+.ex-input.err{border-color:var(--red);color:var(--red);}
+.ex-feedback{margin-top:10px;font-size:.82rem;font-family:'Space Mono',monospace;display:none;padding:8px 12px;border-radius:8px;}
+.ex-feedback.ok{display:block;color:var(--green);background:rgba(90,158,80,.08);}
+.ex-feedback.err{display:block;color:var(--red);background:rgba(192,68,42,.06);}
+.ex-check-btn{margin-top:10px;}
+.speak-row{display:flex;gap:8px;align-items:center;margin-bottom:12px;}
+.audio-btn{
+  display:flex;align-items:center;gap:6px;padding:6px 12px;
+  background:rgba(124,106,255,.1);border:1px solid rgba(124,106,255,.3);
+  border-radius:999px;color:var(--accent);font-family:'Space Mono',monospace;
+  font-size:.68rem;cursor:pointer;transition:all .15s;
+}
+.audio-btn:hover{background:rgba(196,122,43,.2);}
+
+.lv-finish{text-align:center;padding:28px 20px;background:var(--card);border:1px solid var(--border);border-radius:16px;margin-top:24px;}
+.lv-finish h2{font-size:1.6rem;font-weight:900;margin-bottom:8px;}
+.lv-finish .finish-score{font-size:3rem;font-weight:900;font-family:'Space Mono',monospace;margin:16px 0;}
+.lv-finish p{color:var(--muted);font-size:.85rem;margin-bottom:20px;font-family:'Space Mono',monospace;}
+.xp-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(196,122,43,.12);border:1px solid rgba(196,122,43,.35);
+  border-radius:999px;padding:6px 16px;color:var(--accent);
+  font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;margin-bottom:20px;
+}
+
+/* ── VOCAB PAGE ── */
+.vocab-page{padding:14px 14px 0;}
+.vocab-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.vocab-search{
+  flex:1;min-width:150px;padding:9px 13px;background:var(--card);
+  border:1px solid var(--border);border-radius:8px;color:var(--text);
+  font-family:'Lora',serif;font-size:.9rem;outline:none;transition:border-color .2s;
+}
+.vocab-search:focus{border-color:var(--accent);}
+.cat-scroller{display:flex;gap:6px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none;}
+.cat-scroller::-webkit-scrollbar{display:none;}
+.cat-chip{
+  padding:4px 12px;border-radius:999px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);font-family:'Space Mono',monospace;
+  font-size:.65rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s;
+}
+.cat-chip.active,.cat-chip:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px;}
+.word-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:11px 13px;cursor:pointer;transition:all .15s;position:relative;user-select:none;
+}
+.word-card:hover{border-color:var(--accent);transform:translateY(-1px);}
+.word-card.known{border-color:var(--green);background:rgba(77,240,160,.05);}
+.word-card.unknown{border-color:var(--red);background:rgba(255,77,106,.05);}
+.wc-num{font-family:'Space Mono',monospace;font-size:.55rem;color:var(--border2);position:absolute;top:7px;right:9px;}
+.wc-en{font-family:'Space Mono',monospace;font-size:.87rem;font-weight:700;color:var(--accent);margin-bottom:3px;display:flex;align-items:center;gap:5px;}
+.wc-pl{font-size:.75rem;color:var(--muted);line-height:1.3;}
+.wc-cat{font-size:.6rem;color:var(--accent2);margin-top:3px;text-transform:uppercase;letter-spacing:.06em;font-family:'Space Mono',monospace;}
+.sdot{width:6px;height:6px;border-radius:50%;position:absolute;top:8px;left:9px;}
+.known .sdot{background:var(--green);}
+.unknown .sdot{background:var(--red);}
+.spk{width:16px;height:16px;border-radius:50%;background:rgba(124,106,255,.15);border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:.62rem;flex-shrink:0;}
+.spk:hover{background:rgba(124,106,255,.35);}
+#noResults{text-align:center;color:var(--muted);padding:50px 20px;display:none;font-family:'Space Mono',monospace;font-size:.82rem;}
+
+/* ── QUIZ PAGE ── */
+.quiz-page{padding:18px;max-width:520px;margin:0 auto;}
+.quiz-setup-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;}
+.quiz-setup-card h2{font-size:1.4rem;font-weight:900;margin-bottom:4px;}
+.quiz-setup-card>p{color:var(--muted);font-family:'Space Mono',monospace;font-size:.75rem;margin-bottom:22px;}
+.setup-sec{margin-bottom:16px;}
+.setup-lbl{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:7px;}
+.setup-opts{display:flex;gap:7px;flex-wrap:wrap;}
+.setup-opt{
+  flex:1;min-width:90px;padding:9px 11px;border-radius:10px;
+  border:1px solid var(--border);background:transparent;color:var(--text);
+  font-family:'Lora',serif;font-size:.82rem;font-weight:700;cursor:pointer;
+  transition:all .15s;text-align:center;line-height:1.3;
+}
+.setup-opt small{display:block;font-weight:400;font-size:.65rem;color:var(--muted);font-family:'Space Mono',monospace;}
+.setup-opt:hover{border-color:var(--accent);}
+.setup-opt.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.setup-opt.active small{color:rgba(255,255,255,.7);}
+.qactive{display:none;}
+.qactive.show{display:block;}
+.q-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);}
+.q-scores{display:flex;gap:10px;}
+.q-pbar{height:3px;background:var(--border);border-radius:2px;margin-bottom:16px;overflow:hidden;}
+.q-pfill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s;}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.08);}
+.q-badge{display:inline-block;font-family:'Space Mono',monospace;font-size:.65rem;color:var(--accent3);background:rgba(74,127,165,.1);border:1px solid rgba(74,127,165,.3);border-radius:999px;padding:3px 11px;margin-bottom:12px;}
+.q-word{font-size:1.8rem;font-weight:900;color:var(--accent);margin-bottom:6px;line-height:1.2;}
+.q-spk{background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);transition:color .15s;}
+.q-spk:hover{color:var(--accent);}
+.q-inp{width:100%;padding:11px 14px;margin:14px 0 7px;background:var(--bg);border:2px solid var(--border);border-radius:10px;color:var(--text);font-family:'Lora',serif;font-size:.95rem;font-weight:700;outline:none;text-align:center;transition:border-color .2s;}
+.q-inp:focus{border-color:var(--accent);}
+.q-inp.ok{border-color:var(--green);background:rgba(77,240,160,.06);color:var(--green);}
+.q-inp.err{border-color:var(--red);background:rgba(192,68,42,.06);color:var(--red);}
+.q-fb{min-height:20px;font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;margin-bottom:5px;}
+.q-fb.ok{color:var(--green);}
+.q-fb.err{color:var(--red);}
+.q-correct{font-size:.78rem;color:var(--muted);min-height:18px;margin-bottom:14px;font-family:'Space Mono',monospace;}
+.q-correct b{color:var(--text);}
+.q-btns{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;}
+.flip-ans{font-size:1.3rem;font-weight:700;color:var(--accent3);min-height:46px;margin:14px 0;line-height:1.3;}
+.qresult{display:none;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:32px 22px;text-align:center;}
+.qresult.show{display:block;}
+.qr-emoji{font-size:3rem;margin-bottom:8px;}
+.qr-title{font-size:1.6rem;font-weight:900;margin-bottom:4px;}
+.qr-sub{color:var(--muted);font-family:'Space Mono',monospace;font-size:.72rem;margin-bottom:20px;}
+.qr-nums{display:flex;gap:18px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;}
+.qr-num .v{font-size:2rem;font-weight:900;font-family:'Space Mono',monospace;}
+.qr-num .l{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-family:'Space Mono',monospace;}
+
+/* ── SENTENCES PAGE ── */
+.sent-page{padding:18px;max-width:600px;margin:0 auto;}
+.sent-hdr{margin-bottom:18px;}
+.sent-hdr h2{font-size:1.5rem;font-weight:900;}
+.sent-hdr p{color:var(--muted);font-family:'Space Mono',monospace;font-size:.72rem;margin-top:4px;line-height:1.5;}
+.sent-controls{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.sent-select{flex:1;padding:9px 13px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Space Mono',monospace;font-size:.72rem;outline:none;cursor:pointer;}
+.sent-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.sent-word-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.sent-badge{background:rgba(196,122,43,.12);border:1px solid rgba(196,122,43,.3);border-radius:6px;padding:2px 9px;color:var(--accent);font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;}
+.sent-pl-tag{background:rgba(122,158,110,.1);border:1px solid rgba(122,158,110,.3);border-radius:999px;padding:2px 9px;color:var(--accent2);font-family:'Space Mono',monospace;font-size:.62rem;}
+.sent-audio-row{display:flex;gap:8px;margin-bottom:10px;}
+.sent-translation{font-size:1.05rem;color:var(--text);line-height:1.7;margin-bottom:14px;font-style:italic;font-family:'Lora',serif;}
+.sent-textarea{width:100%;padding:11px 14px;background:var(--bg);border:2px solid var(--border);border-radius:10px;color:var(--text);font-family:'Lora',serif;font-size:.95rem;outline:none;resize:none;transition:border-color .2s;}
+.sent-textarea:focus{border-color:var(--accent);}
+.sent-textarea.ok{border-color:var(--green);}
+.sent-textarea.err{border-color:var(--red);}
+.sent-acts{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap;}
+.sent-fb{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 15px;margin-top:11px;display:none;font-size:.85rem;line-height:1.6;}
+.sent-fb.show{display:block;}
+.sent-fb .fb-ok{color:var(--green);font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;margin-bottom:5px;}
+.sent-fb .fb-err{color:var(--red);font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;margin-bottom:5px;}
+.sent-fb .fb-correct{color:var(--accent3);font-weight:700;margin-top:6px;}
+.hint-row{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);margin-top:8px;display:none;}
+.hist-section{margin-top:24px;}
+.hist-section h3{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+.hist-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:7px;font-size:.8rem;}
+.hist-item .hw{color:var(--accent);font-family:'Space Mono',monospace;font-size:.65rem;margin-bottom:2px;}
+.hist-item .hs{color:var(--text);}
+.hist-item .hr{font-family:'Space Mono',monospace;font-size:.62rem;margin-top:3px;}
+.hist-item.h-ok .hr{color:var(--green);}
+.hist-item.h-err .hr{color:var(--red);}
+.empty-state{text-align:center;color:var(--muted);padding:50px 18px;font-family:'Space Mono',monospace;font-size:.8rem;}
+
+@media(max-width:400px){
+  .word-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
+  .q-word{font-size:1.4rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <button class="bnav-tab active" onclick="switchTab('home')"><span class="icon">🏠</span>Główna</button>
+  <button class="bnav-tab" onclick="switchTab('grammar')"><span class="icon">📖</span>Gramatyka</button>
+  <button class="bnav-tab" onclick="switchTab('vocab')"><span class="icon">📚</span>Słownik</button>
+  <button class="bnav-tab" onclick="switchTab('quiz')"><span class="icon">🎮</span>Quiz</button>
+  <button class="bnav-tab" onclick="switchTab('sentences')"><span class="icon">✍️</span>Zdania</button>
+</nav>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="tab-home" class="page active">
+  <div class="home-header">
+    <div style="margin-bottom:18px;">
+      <div style="font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;">Aplikacja do nauki</div>
+      <h1 style="font-size:1.8rem;font-weight:700;line-height:1.1;font-family:'Lora',serif;">Angielski <span style="color:var(--accent)">by Gracjan</span></h1>
+    </div>
+    <div class="home-streak">
+      <div class="streak-fire">🔥</div>
+      <div class="streak-info">
+        <div class="streak-num" id="streakNum">0</div>
+        <div class="streak-lbl">dni z rzędu</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted)">XP łącznie</div>
+        <div style="font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--accent)" id="totalXP">0</div>
+      </div>
+    </div>
+    <div class="overall-progress">
+      <div class="op-label"><span>Postęp ogólny</span><span id="overallPct">0%</span></div>
+      <div class="op-bar"><div class="op-fill" id="overallFill" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="section-title">Twoje statystyki</div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="s-num" style="color:var(--green)" id="wordsKnown">0</div><div class="s-lbl">słów znanych</div></div>
+    <div class="stat-card"><div class="s-num" style="color:var(--accent)" id="lessonsCompleted">0</div><div class="s-lbl">lekcji ukończonych</div></div>
+    <div class="stat-card"><div class="s-num" style="color:var(--accent2)" id="sentencesDone">0</div><div class="s-lbl">zdań przetłumaczonych</div></div>
+    <div class="stat-card"><div class="s-num" style="color:var(--accent)" id="quizzesDone">0</div><div class="s-lbl">quizów ukończonych</div></div>
+  </div>
+  <div class="section-title">Szybki dostęp</div>
+  <div style="padding:0 18px 20px;display:flex;flex-direction:column;gap:8px;">
+    <button class="btn-primary" onclick="switchTab('grammar')">📖 Kontynuuj lekcję gramatyki →</button>
+    <button class="btn" style="width:100%;padding:12px" onclick="switchTab('quiz')">🎮 Szybki quiz słówek</button>
+    <button class="btn" style="width:100%;padding:12px" onclick="switchTab('sentences')">✍️ Ćwicz zdania z AI</button>
+  </div>
+  <div class="section-title">Moduły gramatyki</div>
+  <div id="homeModuleList" style="padding:0 18px 20px;display:flex;flex-direction:column;gap:8px;"></div>
+</div>
+
+<!-- ══════════ GRAMMAR ══════════ -->
+<div id="tab-grammar" class="page">
+  <div class="grammar-page">
+    <div class="gpage-header">
+      <h1>📖 Gramatyka</h1>
+      <p>31 lekcji • 7 modułów • gramatyka angielska by Gracjan</p>
+    </div>
+    <div id="moduleList"></div>
+  </div>
+</div>
+
+<!-- LESSON VIEW (overlay) -->
+<div class="lesson-view" id="lessonView">
+  <div class="lv-header">
+    <div class="lv-back" onclick="closelesson()">←</div>
+    <div class="lv-title">
+      <h2 id="lvTitle">Lekcja</h2>
+      <div class="lv-module" id="lvModule"></div>
+    </div>
+    <div class="lv-xp" id="lvXP">+20 XP</div>
+  </div>
+  <div class="lv-content" id="lvContent"></div>
+</div>
+
+<!-- ══════════ VOCAB ══════════ -->
+<div id="tab-vocab" class="page">
+  <div class="vocab-page">
+    <div class="vocab-controls">
+      <input type="text" class="vocab-search" id="vocabSearch" placeholder="🔍 Szukaj...">
+      <button class="btn" id="vfKnown" onclick="toggleVFilter('known',this)">✅ Znam</button>
+      <button class="btn" id="vfUnknown" onclick="toggleVFilter('unknown',this)">❌ Nie znam</button>
+      <button class="btn" onclick="resetWords()">🔄</button>
+    </div>
+    <div class="cat-scroller" id="catScroller"></div>
+    <div style="font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);margin-bottom:8px" id="vocabStats"></div>
+    <div class="word-grid" id="wordGrid"></div>
+    <div id="noResults">Brak wyników</div>
+  </div>
+</div>
+
+<!-- ══════════ QUIZ ══════════ -->
+<div id="tab-quiz" class="page">
+  <div class="quiz-page">
+    <div id="quizSetup">
+      <div class="quiz-setup-card">
+        <h2>🎮 Quiz</h2>
+        <p>Skonfiguruj sesję ćwiczeń</p>
+        <div class="setup-sec"><span class="setup-lbl">Tryb</span>
+          <div class="setup-opts">
+            <button class="setup-opt active" onclick="setQOpt('mode','type',this)">✏️ Wpisywanie<small>wpisz tłumaczenie</small></button>
+            <button class="setup-opt" onclick="setQOpt('mode','flip',this)">👁 Fiszki<small>pokaż / ocen</small></button>
+          </div>
+        </div>
+        <div class="setup-sec"><span class="setup-lbl">Kierunek</span>
+          <div class="setup-opts">
+            <button class="setup-opt active" onclick="setQOpt('dir','en-pl',this)">🇬🇧→🇵🇱<small>en → pl</small></button>
+            <button class="setup-opt" onclick="setQOpt('dir','pl-en',this)">🇵🇱→🇬🇧<small>pl → en</small></button>
+            <button class="setup-opt" onclick="setQOpt('dir','en-de',this)">🇬🇧→🇩🇪<small>en → de</small></button>
+            <button class="setup-opt" onclick="setQOpt('dir','de-en',this)">🇩🇪→🇬🇧<small>de → en</small></button>
+            <button class="setup-opt" onclick="setQOpt('dir','mix',this)">🔀 Mix<small>losowo</small></button>
+          </div>
+        </div>
+        <div class="setup-sec"><span class="setup-lbl">Pula słów</span>
+          <div class="setup-opts">
+            <button class="setup-opt active" onclick="setQOpt('pool','all',this)">📋 Wszystkie</button>
+            <button class="setup-opt" onclick="setQOpt('pool','unknown',this)">❌ Nieznane</button>
+          </div>
+        </div>
+        <div class="setup-sec"><span class="setup-lbl">Ilość</span>
+          <div class="setup-opts">
+            <button class="setup-opt active" onclick="setQOpt('count','20',this)">20</button>
+            <button class="setup-opt" onclick="setQOpt('count','50',this)">50</button>
+            <button class="setup-opt" onclick="setQOpt('count','100',this)">100</button>
+            <button class="setup-opt" onclick="setQOpt('count','all',this)">Wszystkie</button>
+          </div>
+        </div>
+        <button class="btn-primary" style="margin-top:8px" onclick="startQuiz()">Rozpocznij →</button>
+      </div>
+    </div>
+    <div class="qactive" id="quizActive">
+      <div class="q-topbar">
+        <span id="qProg">1/20</span>
+        <div class="q-scores"><span style="color:var(--green)">✓ <span id="qG">0</span></span><span style="color:var(--red)">✗ <span id="qB">0</span></span></div>
+        <button class="btn" onclick="endQuiz()">✕</button>
+      </div>
+      <div class="q-pbar"><div class="q-pfill" id="qPFill"></div></div>
+      <div class="q-card">
+        <div class="q-badge" id="qBadge">EN→PL</div>
+        <div class="q-word"><span id="qWordTxt"></span> <button class="q-spk" onclick="qSpeak()">🔊</button></div>
+        <div id="qTypeUI">
+          <input type="text" class="q-inp" id="qInp" placeholder="Wpisz tłumaczenie..." autocomplete="off" autocorrect="off" spellcheck="false">
+          <div class="q-fb" id="qFb"></div>
+          <div class="q-correct" id="qCorrectTxt"></div>
+          <div class="q-btns">
+            <button class="btn active" id="qCheckBtn" onclick="qCheck()">Sprawdź →</button>
+            <button class="btn" onclick="qSkip()">Pomiń</button>
+          </div>
+        </div>
+        <div id="qFlipUI" style="display:none">
+          <div class="flip-ans" id="qFlipAns"></div>
+          <div class="q-btns">
+            <button class="btn" onclick="qFlipShow()">👁 Pokaż</button>
+            <button class="btn" style="border-color:var(--green);color:var(--green)" onclick="qFlipMark(true)">✓ Znam</button>
+            <button class="btn" style="border-color:var(--red);color:var(--red)" onclick="qFlipMark(false)">✗ Nie znam</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="qresult" id="quizResult">
+      <div class="qr-emoji" id="qrEmoji">🎉</div>
+      <div class="qr-title" id="qrTitle">Koniec!</div>
+      <div class="qr-sub" id="qrSub"></div>
+      <div class="qr-nums">
+        <div class="qr-num"><div class="v" style="color:var(--green)" id="qrG">0</div><div class="l">Dobrze</div></div>
+        <div class="qr-num"><div class="v" style="color:var(--red)" id="qrB">0</div><div class="l">Błąd</div></div>
+        <div class="qr-num"><div class="v" style="color:var(--accent)" id="qrP">0%</div><div class="l">Wynik</div></div>
+      </div>
+      <button class="btn-primary" onclick="resetQuiz()">Nowa sesja →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SENTENCES ══════════ -->
+<div id="tab-sentences" class="page">
+  <div class="sent-page">
+    <div class="sent-hdr"><h2>✍️ Zdania AI</h2><p>AI generuje zdanie po polsku. Przetłumacz je na angielski.</p></div>
+    <div class="sent-controls">
+      <select class="sent-select" id="sentLevel">
+        <option value="A1">A1 – Początkujący</option>
+        <option value="A2">A2 – Podstawowy</option>
+        <option value="B1" selected>B1 – Średniozaawansowany</option>
+        <option value="B2">B2 – Wyższy średni</option>
+        <option value="C1">C1 – Zaawansowany</option>
+      </select>
+      <button class="btn-primary" style="flex:0;padding:10px 16px;font-size:.82rem" onclick="genSentence()">✨ Nowe zdanie</button>
+    </div>
+    <div id="sentEmpty" class="empty-state">Kliknij "✨ Nowe zdanie" aby zacząć!</div>
+    <div id="sentLoading" style="display:none" class="sent-card">
+      <div style="text-align:center;padding:16px;color:var(--muted);font-family:'Space Mono',monospace;font-size:.82rem">
+        AI generuje zdanie <div class="loading-dots" style="margin:8px auto 0;justify-content:center"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+    <div id="sentCardWrap" style="display:none">
+      <div class="sent-card">
+        <div class="sent-word-row">
+          <span style="font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted)">Słowo:</span>
+          <span class="sent-badge" id="sWord"></span>
+          <span class="sent-pl-tag" id="sWordPl"></span>
+          <button class="audio-btn" onclick="speak(sentData.word,'en-US')" style="margin-left:auto">🔊 EN</button>
+        </div>
+        <div class="sent-audio-row">
+          <button class="audio-btn" onclick="speak(sentData.polish,'pl-PL',0.85)">🔊 Posłuchaj po polsku</button>
+        </div>
+        <div class="sent-translation" id="sTransl"></div>
+        <div style="font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);margin-bottom:7px">Twoje tłumaczenie:</div>
+        <textarea class="sent-textarea" id="sInput" rows="3" placeholder="Wpisz zdanie po angielsku..."></textarea>
+        <div class="sent-acts">
+          <button class="btn-primary" style="flex:1;padding:10px;font-size:.82rem" onclick="checkSentence()">Sprawdź ✓</button>
+          <button class="btn" onclick="sentHint()">💡 Hint</button>
+          <button class="btn" onclick="sentReveal()">👁 Pokaż</button>
+          <button class="btn" id="sentSpkBtn" style="display:none" onclick="speak(sentData.english,'en-US',0.85)">🔊</button>
+        </div>
+        <div class="hint-row" id="hintRow"></div>
+        <div class="sent-fb" id="sentFb"></div>
+      </div>
+    </div>
+    <div class="hist-section" id="histSection" style="display:none">
+      <h3>📜 Historia</h3>
+      <div id="histList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const words = [
+  // A
+  {n:1,en:"a",pl:"przedimek nieokreślony",de:"unbestimmter Artikel",cat:"Podstawowe"},
+  {n:2,en:"ability",pl:"zdolność, umiejętność",de:"Fähigkeit, Können",cat:"Cechy"},
+  {n:3,en:"able",pl:"zdolny, być w stanie",de:"fähig, in der Lage",cat:"Cechy"},
+  {n:4,en:"about",pl:"o, około, dotyczący",de:"über, ungefähr",cat:"Podstawowe"},
+  {n:5,en:"above",pl:"powyżej, nad",de:"oben, über",cat:"Podstawowe"},
+  {n:6,en:"accept",pl:"akceptować, przyjmować",de:"akzeptieren, annehmen",cat:"Czasowniki"},
+  {n:7,en:"according",pl:"według, zgodnie z",de:"laut, gemäß",cat:"Podstawowe"},
+  {n:8,en:"account",pl:"konto, rachunek, konto bankowe",de:"Konto, Rechnung",cat:"Rzeczowniki"},
+  {n:9,en:"across",pl:"przez, po drugiej stronie",de:"quer, über",cat:"Podstawowe"},
+  {n:10,en:"act",pl:"działać, ustawa, akt",de:"handeln, Gesetz, Akt",cat:"Czasowniki"},
+  {n:11,en:"action",pl:"działanie, akcja",de:"Handlung, Aktion",cat:"Rzeczowniki"},
+  {n:12,en:"activity",pl:"aktywność, działalność",de:"Aktivität, Tätigkeit",cat:"Rzeczowniki"},
+  {n:13,en:"actually",pl:"właściwie, naprawdę",de:"eigentlich, tatsächlich",cat:"Podstawowe"},
+  {n:14,en:"add",pl:"dodać, dodawać",de:"hinzufügen, addieren",cat:"Czasowniki"},
+  {n:15,en:"address",pl:"adres, mowa, przemówienie",de:"Adresse, Rede",cat:"Rzeczowniki"},
+  {n:16,en:"administration",pl:"administracja, zarząd",de:"Verwaltung, Administration",cat:"Rzeczowniki"},
+  {n:17,en:"admit",pl:"przyznać, wpuścić",de:"zugeben, einlassen",cat:"Czasowniki"},
+  {n:18,en:"adult",pl:"dorosły",de:"Erwachsener",cat:"Ludzie"},
+  {n:19,en:"affect",pl:"wpływać na, dotykać",de:"beeinflussen, betreffen",cat:"Czasowniki"},
+  {n:20,en:"after",pl:"po, po tym jak",de:"nach, nachdem",cat:"Podstawowe"},
+  {n:21,en:"again",pl:"znowu, ponownie",de:"wieder, nochmal",cat:"Podstawowe"},
+  {n:22,en:"against",pl:"przeciwko, przy",de:"gegen, an",cat:"Podstawowe"},
+  {n:23,en:"age",pl:"wiek, epoka",de:"Alter, Epoche",cat:"Czas"},
+  {n:24,en:"agency",pl:"agencja, pośrednictwo",de:"Agentur, Behörde",cat:"Rzeczowniki"},
+  {n:25,en:"agent",pl:"agent, przedstawiciel",de:"Agent, Vertreter",cat:"Ludzie"},
+  {n:26,en:"ago",pl:"temu (w czasie)",de:"vor (zeitlich)",cat:"Czas"},
+  {n:27,en:"agree",pl:"zgadzać się",de:"zustimmen, einverstanden sein",cat:"Czasowniki"},
+  {n:28,en:"agreement",pl:"porozumienie, umowa",de:"Vereinbarung, Abkommen",cat:"Rzeczowniki"},
+  {n:29,en:"ahead",pl:"przed, naprzód",de:"voraus, vorwärts",cat:"Podstawowe"},
+  {n:30,en:"air",pl:"powietrze",de:"Luft",cat:"Natura"},
+  {n:31,en:"all",pl:"wszystko, wszyscy",de:"alle, alles",cat:"Podstawowe"},
+  {n:32,en:"allow",pl:"pozwolić, zezwolić",de:"erlauben, zulassen",cat:"Czasowniki"},
+  {n:33,en:"almost",pl:"prawie, niemal",de:"fast, beinahe",cat:"Podstawowe"},
+  {n:34,en:"alone",pl:"sam, samotny",de:"allein, einsam",cat:"Cechy"},
+  {n:35,en:"along",pl:"wzdłuż, razem z",de:"entlang, mit",cat:"Podstawowe"},
+  {n:36,en:"already",pl:"już",de:"schon, bereits",cat:"Podstawowe"},
+  {n:37,en:"also",pl:"również, także",de:"auch, ebenfalls",cat:"Podstawowe"},
+  {n:38,en:"although",pl:"chociaż, mimo że",de:"obwohl, obgleich",cat:"Podstawowe"},
+  {n:39,en:"always",pl:"zawsze",de:"immer",cat:"Podstawowe"},
+  {n:40,en:"American",pl:"Amerykanin, amerykański",de:"Amerikaner, amerikanisch",cat:"Miejsca"},
+  {n:41,en:"among",pl:"wśród, pomiędzy",de:"unter, zwischen",cat:"Podstawowe"},
+  {n:42,en:"amount",pl:"ilość, kwota",de:"Menge, Betrag",cat:"Liczby"},
+  {n:43,en:"analysis",pl:"analiza",de:"Analyse",cat:"Rzeczowniki"},
+  {n:44,en:"and",pl:"i, oraz",de:"und",cat:"Podstawowe"},
+  {n:45,en:"animal",pl:"zwierzę",de:"Tier",cat:"Natura"},
+  {n:46,en:"another",pl:"inny, kolejny",de:"ein anderer, noch ein",cat:"Podstawowe"},
+  {n:47,en:"answer",pl:"odpowiedź, odpowiedzieć",de:"Antwort, antworten",cat:"Komunikacja"},
+  {n:48,en:"any",pl:"jakiś, żaden",de:"irgendein, kein",cat:"Podstawowe"},
+  {n:49,en:"anyone",pl:"ktokolwiek, nikt",de:"irgendjemand, niemand",cat:"Podstawowe"},
+  {n:50,en:"anything",pl:"cokolwiek, nic",de:"irgendetwas, nichts",cat:"Podstawowe"},
+  {n:51,en:"appear",pl:"pojawiać się, wydawać się",de:"erscheinen, scheinen",cat:"Czasowniki"},
+  {n:52,en:"apply",pl:"zastosować, ubiegać się",de:"bewerben, anwenden",cat:"Czasowniki"},
+  {n:53,en:"approach",pl:"podejście, zbliżać się",de:"Ansatz, näherkommen",cat:"Czasowniki"},
+  {n:54,en:"area",pl:"obszar, strefa, dziedzina",de:"Bereich, Fläche, Gebiet",cat:"Miejsca"},
+  {n:55,en:"argue",pl:"kłócić się, argumentować",de:"streiten, argumentieren",cat:"Komunikacja"},
+  {n:56,en:"arm",pl:"ramię, broń",de:"Arm, Waffe",cat:"Ciało"},
+  {n:57,en:"around",pl:"wokół, około",de:"um, herum, ungefähr",cat:"Podstawowe"},
+  {n:58,en:"arrive",pl:"przybyć, przyjechać",de:"ankommen, eintreffen",cat:"Czasowniki"},
+  {n:59,en:"art",pl:"sztuka",de:"Kunst",cat:"Kultura"},
+  {n:60,en:"article",pl:"artykuł, przedimek",de:"Artikel",cat:"Rzeczowniki"},
+  {n:61,en:"artist",pl:"artysta",de:"Künstler",cat:"Ludzie"},
+  {n:62,en:"as",pl:"jako, jak, gdy",de:"als, wie, da",cat:"Podstawowe"},
+  {n:63,en:"ask",pl:"pytać, prosić",de:"fragen, bitten",cat:"Komunikacja"},
+  {n:64,en:"assume",pl:"zakładać, przypuszczać",de:"annehmen, voraussetzen",cat:"Czasowniki"},
+  {n:65,en:"at",pl:"w, na, przy (miejsce)",de:"an, bei, um (Ort)",cat:"Podstawowe"},
+  {n:66,en:"attack",pl:"atak, atakować",de:"Angriff, angreifen",cat:"Czasowniki"},
+  {n:67,en:"attention",pl:"uwaga, zainteresowanie",de:"Aufmerksamkeit",cat:"Rzeczowniki"},
+  {n:68,en:"attorney",pl:"prawnik, adwokat",de:"Anwalt, Rechtsanwalt",cat:"Ludzie"},
+  {n:69,en:"audience",pl:"publiczność, widownia",de:"Publikum, Zuschauer",cat:"Ludzie"},
+  {n:70,en:"author",pl:"autor, pisarz",de:"Autor, Schriftsteller",cat:"Ludzie"},
+  {n:71,en:"authority",pl:"autorytet, władza",de:"Autorität, Behörde",cat:"Rzeczowniki"},
+  {n:72,en:"available",pl:"dostępny",de:"verfügbar, erhältlich",cat:"Cechy"},
+  {n:73,en:"avoid",pl:"unikać",de:"vermeiden, ausweichen",cat:"Czasowniki"},
+  {n:74,en:"away",pl:"daleko, precz",de:"weg, entfernt",cat:"Podstawowe"},
+  // B
+  {n:75,en:"baby",pl:"niemowlę, dziecko",de:"Baby, Kleinkind",cat:"Ludzie"},
+  {n:76,en:"back",pl:"plecy, tył, wracać",de:"Rücken, zurück",cat:"Ciało"},
+  {n:77,en:"bad",pl:"zły, niedobry",de:"schlecht, böse",cat:"Cechy"},
+  {n:78,en:"bag",pl:"torba, torebka",de:"Tasche, Beutel",cat:"Przedmioty"},
+  {n:79,en:"ball",pl:"piłka, kula, bal",de:"Ball, Kugel",cat:"Przedmioty"},
+  {n:80,en:"bank",pl:"bank, brzeg (rzeki)",de:"Bank, Ufer",cat:"Miejsca"},
+  {n:81,en:"bar",pl:"bar, sztaba, belka",de:"Bar, Riegel, Stange",cat:"Miejsca"},
+  {n:82,en:"base",pl:"podstawa, baza",de:"Grundlage, Basis",cat:"Rzeczowniki"},
+  {n:83,en:"be",pl:"być",de:"sein",cat:"Podstawowe"},
+  {n:84,en:"beat",pl:"bić, uderzać, rytm",de:"schlagen, Rhythmus",cat:"Czasowniki"},
+  {n:85,en:"beautiful",pl:"piękny, śliczny",de:"schön, wunderschön",cat:"Cechy"},
+  {n:86,en:"because",pl:"ponieważ, bo",de:"weil, da",cat:"Podstawowe"},
+  {n:87,en:"become",pl:"stać się, zostać",de:"werden, sein",cat:"Czasowniki"},
+  {n:88,en:"bed",pl:"łóżko",de:"Bett",cat:"Dom"},
+  {n:89,en:"before",pl:"przed, wcześniej",de:"vor, bevor",cat:"Czas"},
+  {n:90,en:"begin",pl:"zaczynać, rozpoczynać",de:"beginnen, anfangen",cat:"Czasowniki"},
+  {n:91,en:"behavior",pl:"zachowanie, postępowanie",de:"Verhalten, Benehmen",cat:"Rzeczowniki"},
+  {n:92,en:"behind",pl:"za, z tyłu",de:"hinter, zurück",cat:"Podstawowe"},
+  {n:93,en:"believe",pl:"wierzyć, uważać",de:"glauben, denken",cat:"Czasowniki"},
+  {n:94,en:"benefit",pl:"korzyść, zasiłek",de:"Vorteil, Nutzen",cat:"Rzeczowniki"},
+  {n:95,en:"best",pl:"najlepszy",de:"best, am besten",cat:"Cechy"},
+  {n:96,en:"better",pl:"lepszy, lepiej",de:"besser",cat:"Cechy"},
+  {n:97,en:"between",pl:"między, pomiędzy",de:"zwischen",cat:"Podstawowe"},
+  {n:98,en:"beyond",pl:"poza, ponad",de:"jenseits, über",cat:"Podstawowe"},
+  {n:99,en:"big",pl:"duży, wielki",de:"groß",cat:"Cechy"},
+  {n:100,en:"bill",pl:"rachunek, ustawa, banknot",de:"Rechnung, Gesetz, Geldschein",cat:"Rzeczowniki"},
+  {n:101,en:"billion",pl:"miliard",de:"Milliarde",cat:"Liczby"},
+  {n:102,en:"bit",pl:"kawałek, trochę",de:"bisschen, Stück",cat:"Liczby"},
+  {n:103,en:"black",pl:"czarny",de:"schwarz",cat:"Kolory"},
+  {n:104,en:"blood",pl:"krew",de:"Blut",cat:"Ciało"},
+  {n:105,en:"blue",pl:"niebieski",de:"blau",cat:"Kolory"},
+  {n:106,en:"board",pl:"deska, tablica, zarząd",de:"Brett, Tafel, Vorstand",cat:"Rzeczowniki"},
+  {n:107,en:"body",pl:"ciało",de:"Körper",cat:"Ciało"},
+  {n:108,en:"book",pl:"książka",de:"Buch",cat:"Kultura"},
+  {n:109,en:"born",pl:"urodzony, rodzić się",de:"geboren",cat:"Czasowniki"},
+  {n:110,en:"both",pl:"oba, oboje",de:"beide",cat:"Podstawowe"},
+  {n:111,en:"box",pl:"pudełko, skrzynka",de:"Schachtel, Kiste",cat:"Przedmioty"},
+  {n:112,en:"boy",pl:"chłopiec",de:"Junge",cat:"Ludzie"},
+  {n:113,en:"break",pl:"złamać, przerwa",de:"brechen, Pause",cat:"Czasowniki"},
+  {n:114,en:"bring",pl:"przynosić, przywozić",de:"bringen, mitbringen",cat:"Czasowniki"},
+  {n:115,en:"brother",pl:"brat",de:"Bruder",cat:"Rodzina"},
+  {n:116,en:"budget",pl:"budżet",de:"Budget, Haushalt",cat:"Finanse"},
+  {n:117,en:"build",pl:"budować, wznosić",de:"bauen, errichten",cat:"Czasowniki"},
+  {n:118,en:"building",pl:"budynek, budowanie",de:"Gebäude, Bau",cat:"Miejsca"},
+  {n:119,en:"business",pl:"biznes, firma, sprawa",de:"Geschäft, Unternehmen",cat:"Praca"},
+  {n:120,en:"but",pl:"ale, lecz",de:"aber, jedoch",cat:"Podstawowe"},
+  {n:121,en:"buy",pl:"kupować",de:"kaufen",cat:"Czasowniki"},
+  {n:122,en:"by",pl:"przez, obok, do",de:"durch, von, bei",cat:"Podstawowe"},
+  // C
+  {n:123,en:"call",pl:"dzwonić, nazywać, rozmowa",de:"anrufen, nennen, Anruf",cat:"Komunikacja"},
+  {n:124,en:"camera",pl:"aparat, kamera",de:"Kamera, Fotoapparat",cat:"Przedmioty"},
+  {n:125,en:"campaign",pl:"kampania",de:"Kampagne, Feldzug",cat:"Rzeczowniki"},
+  {n:126,en:"can",pl:"móc, potrafić, puszka",de:"können, Dose",cat:"Podstawowe"},
+  {n:127,en:"cancer",pl:"rak, nowotwór",de:"Krebs",cat:"Zdrowie"},
+  {n:128,en:"candidate",pl:"kandydat",de:"Kandidat, Bewerber",cat:"Ludzie"},
+  {n:129,en:"capital",pl:"stolica, kapitał",de:"Hauptstadt, Kapital",cat:"Miejsca"},
+  {n:130,en:"car",pl:"samochód, auto",de:"Auto, Wagen",cat:"Transport"},
+  {n:131,en:"card",pl:"karta, kartka",de:"Karte",cat:"Przedmioty"},
+  {n:132,en:"care",pl:"opieka, dbać o",de:"Pflege, sich kümmern",cat:"Czasowniki"},
+  {n:133,en:"career",pl:"kariera, zawód",de:"Karriere, Beruf",cat:"Praca"},
+  {n:134,en:"carry",pl:"nosić, przewozić",de:"tragen, transportieren",cat:"Czasowniki"},
+  {n:135,en:"case",pl:"sprawa, przypadek, walizka",de:"Fall, Koffer, Gehäuse",cat:"Rzeczowniki"},
+  {n:136,en:"catch",pl:"łapać, złapać",de:"fangen, erwischen",cat:"Czasowniki"},
+  {n:137,en:"cause",pl:"przyczyna, powodować",de:"Ursache, verursachen",cat:"Rzeczowniki"},
+  {n:138,en:"cell",pl:"komórka, cela, telefon komórkowy",de:"Zelle, Gefängniszelle, Handy",cat:"Rzeczowniki"},
+  {n:139,en:"center",pl:"centrum, środek",de:"Zentrum, Mitte",cat:"Miejsca"},
+  {n:140,en:"central",pl:"centralny, główny",de:"zentral, Haupt-",cat:"Cechy"},
+  {n:141,en:"century",pl:"wiek, stulecie",de:"Jahrhundert",cat:"Czas"},
+  {n:142,en:"certain",pl:"pewny, określony",de:"sicher, bestimmt",cat:"Cechy"},
+  {n:143,en:"certainly",pl:"na pewno, z pewnością",de:"sicherlich, bestimmt",cat:"Podstawowe"},
+  {n:144,en:"chair",pl:"krzesło, fotel",de:"Stuhl, Sessel",cat:"Dom"},
+  {n:145,en:"challenge",pl:"wyzwanie, kwestionować",de:"Herausforderung, herausfordern",cat:"Rzeczowniki"},
+  {n:146,en:"chance",pl:"szansa, okazja",de:"Chance, Gelegenheit",cat:"Rzeczowniki"},
+  {n:147,en:"change",pl:"zmiana, zmienić",de:"Änderung, ändern",cat:"Czasowniki"},
+  {n:148,en:"character",pl:"charakter, postać",de:"Charakter, Figur",cat:"Cechy"},
+  {n:149,en:"charge",pl:"opłata, zarzut, ładować",de:"Gebühr, Anklage, laden",cat:"Rzeczowniki"},
+  {n:150,en:"check",pl:"sprawdzić, czek",de:"überprüfen, Scheck",cat:"Czasowniki"},
+  {n:151,en:"child",pl:"dziecko",de:"Kind",cat:"Rodzina"},
+  {n:152,en:"choice",pl:"wybór",de:"Wahl, Auswahl",cat:"Rzeczowniki"},
+  {n:153,en:"choose",pl:"wybrać, wybierać",de:"wählen, auswählen",cat:"Czasowniki"},
+  {n:154,en:"church",pl:"kościół",de:"Kirche",cat:"Miejsca"},
+  {n:155,en:"citizen",pl:"obywatel",de:"Bürger",cat:"Ludzie"},
+  {n:156,en:"city",pl:"miasto",de:"Stadt",cat:"Miejsca"},
+  {n:157,en:"civil",pl:"cywilny, obywatelski",de:"zivil, bürgerlich",cat:"Cechy"},
+  {n:158,en:"claim",pl:"twierdzić, roszczenie",de:"behaupten, Anspruch",cat:"Komunikacja"},
+  {n:159,en:"class",pl:"klasa, zajęcia",de:"Klasse, Unterricht",cat:"Edukacja"},
+  {n:160,en:"clear",pl:"jasny, wyraźny, czyścić",de:"klar, deutlich, klären",cat:"Cechy"},
+  {n:161,en:"clearly",pl:"wyraźnie, oczywiście",de:"klar, offensichtlich",cat:"Podstawowe"},
+  {n:162,en:"close",pl:"zamknąć, blisko, bliski",de:"schließen, nah, näherstehen",cat:"Czasowniki"},
+  {n:163,en:"coach",pl:"trener, autokar",de:"Trainer, Reisebus",cat:"Ludzie"},
+  {n:164,en:"cold",pl:"zimny, zimno, przeziębienie",de:"kalt, Kälte, Erkältung",cat:"Cechy"},
+  {n:165,en:"college",pl:"uczelnia, kolegium",de:"Hochschule, College",cat:"Edukacja"},
+  {n:166,en:"color",pl:"kolor, barwa",de:"Farbe",cat:"Kolory"},
+  {n:167,en:"come",pl:"przychodzić, przyjeżdżać",de:"kommen",cat:"Podstawowe"},
+  {n:168,en:"community",pl:"społeczność, wspólnota",de:"Gemeinschaft, Gemeinde",cat:"Ludzie"},
+  {n:169,en:"company",pl:"firma, towarzystwo",de:"Unternehmen, Gesellschaft",cat:"Praca"},
+  {n:170,en:"compare",pl:"porównywać",de:"vergleichen",cat:"Czasowniki"},
+  {n:171,en:"computer",pl:"komputer",de:"Computer",cat:"Technologia"},
+  {n:172,en:"concern",pl:"troska, dotyczyć",de:"Sorge, betreffen",cat:"Rzeczowniki"},
+  {n:173,en:"condition",pl:"warunek, stan, kondycja",de:"Bedingung, Zustand",cat:"Rzeczowniki"},
+  {n:174,en:"conference",pl:"konferencja",de:"Konferenz, Tagung",cat:"Praca"},
+  {n:175,en:"Congress",pl:"Kongres",de:"Kongress",cat:"Polityka"},
+  {n:176,en:"consider",pl:"rozważać, uważać za",de:"erwägen, betrachten",cat:"Czasowniki"},
+  {n:177,en:"consumer",pl:"konsument",de:"Verbraucher, Konsument",cat:"Ludzie"},
+  {n:178,en:"contain",pl:"zawierać",de:"enthalten",cat:"Czasowniki"},
+  {n:179,en:"control",pl:"kontrola, kontrolować",de:"Kontrolle, kontrollieren",cat:"Rzeczowniki"},
+  {n:180,en:"cost",pl:"koszt, kosztować",de:"Kosten, kosten",cat:"Finanse"},
+  {n:181,en:"could",pl:"mógłby, mógłbym",de:"könnte, konnte",cat:"Podstawowe"},
+  {n:182,en:"country",pl:"kraj, wieś",de:"Land, Dorf",cat:"Miejsca"},
+  {n:183,en:"couple",pl:"para, kilka",de:"Paar, einige",cat:"Liczby"},
+  {n:184,en:"course",pl:"kurs, oczywiście",de:"Kurs, natürlich",cat:"Edukacja"},
+  {n:185,en:"court",pl:"sąd, kort",de:"Gericht, Platz",cat:"Miejsca"},
+  {n:186,en:"cover",pl:"okładka, pokrywać",de:"Abdeckung, bedecken",cat:"Czasowniki"},
+  {n:187,en:"create",pl:"tworzyć, stwarzać",de:"erschaffen, erstellen",cat:"Czasowniki"},
+  {n:188,en:"crime",pl:"przestępstwo, zbrodnia",de:"Verbrechen, Straftat",cat:"Prawo"},
+  {n:189,en:"cultural",pl:"kulturowy, kulturalny",de:"kulturell",cat:"Kultura"},
+  {n:190,en:"culture",pl:"kultura",de:"Kultur",cat:"Kultura"},
+  {n:191,en:"cup",pl:"kubek, filiżanka, puchar",de:"Tasse, Becher, Pokal",cat:"Dom"},
+  {n:192,en:"current",pl:"obecny, prąd",de:"aktuell, Strom",cat:"Cechy"},
+  {n:193,en:"customer",pl:"klient",de:"Kunde",cat:"Ludzie"},
+  {n:194,en:"cut",pl:"ciąć, obcinać, cięcie",de:"schneiden, Schnitt",cat:"Czasowniki"},
+  // D
+  {n:195,en:"dark",pl:"ciemny, ciemność",de:"dunkel, Dunkelheit",cat:"Cechy"},
+  {n:196,en:"data",pl:"dane",de:"Daten",cat:"Technologia"},
+  {n:197,en:"daughter",pl:"córka",de:"Tochter",cat:"Rodzina"},
+  {n:198,en:"day",pl:"dzień",de:"Tag",cat:"Czas"},
+  {n:199,en:"dead",pl:"martwy, nieżywy",de:"tot, gestorben",cat:"Cechy"},
+  {n:200,en:"deal",pl:"umowa, radzić sobie",de:"Abkommen, umgehen mit",cat:"Finanse"},
+  {n:201,en:"death",pl:"śmierć",de:"Tod",cat:"Rzeczowniki"},
+  {n:202,en:"debate",pl:"debata, dyskutować",de:"Debatte, diskutieren",cat:"Komunikacja"},
+  {n:203,en:"decade",pl:"dekada, dziesięciolecie",de:"Jahrzehnt",cat:"Czas"},
+  {n:204,en:"decide",pl:"zdecydować, postanowić",de:"entscheiden",cat:"Czasowniki"},
+  {n:205,en:"decision",pl:"decyzja",de:"Entscheidung",cat:"Rzeczowniki"},
+  {n:206,en:"deep",pl:"głęboki",de:"tief",cat:"Cechy"},
+  {n:207,en:"defense",pl:"obrona",de:"Verteidigung",cat:"Polityka"},
+  {n:208,en:"degree",pl:"stopień, dyplom",de:"Grad, Abschluss",cat:"Edukacja"},
+  {n:209,en:"Democrat",pl:"Demokrata",de:"Demokrat",cat:"Polityka"},
+  {n:210,en:"design",pl:"projekt, wzór, projektować",de:"Design, Entwurf, entwerfen",cat:"Kultura"},
+  {n:211,en:"despite",pl:"mimo, pomimo",de:"trotz, obwohl",cat:"Podstawowe"},
+  {n:212,en:"detail",pl:"szczegół, detal",de:"Detail, Einzelheit",cat:"Rzeczowniki"},
+  {n:213,en:"determine",pl:"określić, decydować",de:"bestimmen, entscheiden",cat:"Czasowniki"},
+  {n:214,en:"develop",pl:"rozwijać, tworzyć",de:"entwickeln",cat:"Czasowniki"},
+  {n:215,en:"development",pl:"rozwój, rozbudowa",de:"Entwicklung",cat:"Rzeczowniki"},
+  {n:216,en:"die",pl:"umierać, zdychać",de:"sterben",cat:"Czasowniki"},
+  {n:217,en:"difference",pl:"różnica",de:"Unterschied",cat:"Rzeczowniki"},
+  {n:218,en:"different",pl:"różny, odmienny",de:"anders, verschieden",cat:"Cechy"},
+  {n:219,en:"difficult",pl:"trudny, ciężki",de:"schwierig, schwer",cat:"Cechy"},
+  {n:220,en:"dinner",pl:"kolacja, obiad",de:"Abendessen, Mittagessen",cat:"Jedzenie"},
+  {n:221,en:"direction",pl:"kierunek, dyrekcja",de:"Richtung, Leitung",cat:"Rzeczowniki"},
+  {n:222,en:"director",pl:"dyrektor, reżyser",de:"Direktor, Regisseur",cat:"Praca"},
+  {n:223,en:"discover",pl:"odkryć, odkrywać",de:"entdecken",cat:"Czasowniki"},
+  {n:224,en:"discuss",pl:"omawiać, dyskutować",de:"besprechen, diskutieren",cat:"Komunikacja"},
+  {n:225,en:"discussion",pl:"dyskusja, omówienie",de:"Diskussion, Besprechung",cat:"Komunikacja"},
+  {n:226,en:"do",pl:"robić, czynić",de:"tun, machen",cat:"Podstawowe"},
+  {n:227,en:"doctor",pl:"lekarz, doktor",de:"Arzt, Doktor",cat:"Zdrowie"},
+  {n:228,en:"dog",pl:"pies",de:"Hund",cat:"Natura"},
+  {n:229,en:"door",pl:"drzwi",de:"Tür",cat:"Dom"},
+  {n:230,en:"down",pl:"dół, na dół",de:"unten, hinunter",cat:"Podstawowe"},
+  {n:231,en:"draw",pl:"rysować, ciągnąć, remis",de:"zeichnen, Unentschieden",cat:"Czasowniki"},
+  {n:232,en:"dream",pl:"sen, marzenie, marzyć",de:"Traum, träumen",cat:"Rzeczowniki"},
+  {n:233,en:"drive",pl:"jechać samochodem, napęd",de:"fahren, Antrieb",cat:"Transport"},
+  {n:234,en:"drop",pl:"upuścić, spadek, kropla",de:"fallen lassen, Tropfen",cat:"Czasowniki"},
+  {n:235,en:"drug",pl:"lek, narkotyk",de:"Medikament, Droge",cat:"Zdrowie"},
+  {n:236,en:"during",pl:"podczas, w trakcie",de:"während",cat:"Czas"},
+  // E
+  {n:237,en:"each",pl:"każdy, po",de:"jeder, je",cat:"Podstawowe"},
+  {n:238,en:"early",pl:"wczesny, wcześnie",de:"früh, früher",cat:"Czas"},
+  {n:239,en:"east",pl:"wschód",de:"Osten",cat:"Miejsca"},
+  {n:240,en:"easy",pl:"łatwy, prosty",de:"einfach, leicht",cat:"Cechy"},
+  {n:241,en:"economic",pl:"ekonomiczny, gospodarczy",de:"wirtschaftlich, ökonomisch",cat:"Finanse"},
+  {n:242,en:"economy",pl:"gospodarka, ekonomia",de:"Wirtschaft, Ökonomie",cat:"Finanse"},
+  {n:243,en:"education",pl:"edukacja, wykształcenie",de:"Bildung, Ausbildung",cat:"Edukacja"},
+  {n:244,en:"effect",pl:"efekt, skutek",de:"Wirkung, Effekt",cat:"Rzeczowniki"},
+  {n:245,en:"effort",pl:"wysiłek, trud",de:"Anstrengung, Bemühung",cat:"Rzeczowniki"},
+  {n:246,en:"eight",pl:"osiem",de:"acht",cat:"Liczby"},
+  {n:247,en:"either",pl:"albo, też nie",de:"entweder, auch nicht",cat:"Podstawowe"},
+  {n:248,en:"election",pl:"wybory",de:"Wahl, Abstimmung",cat:"Polityka"},
+  {n:249,en:"else",pl:"inny, jeszcze",de:"sonst, anderer",cat:"Podstawowe"},
+  {n:250,en:"employee",pl:"pracownik",de:"Mitarbeiter, Angestellter",cat:"Praca"},
+  {n:251,en:"energy",pl:"energia",de:"Energie",cat:"Nauka"},
+  {n:252,en:"enjoy",pl:"cieszyć się, lubić",de:"genießen, mögen",cat:"Czasowniki"},
+  {n:253,en:"enough",pl:"wystarczający, dosyć",de:"genug, ausreichend",cat:"Podstawowe"},
+  {n:254,en:"enter",pl:"wchodzić, wpisywać",de:"eintreten, eingeben",cat:"Czasowniki"},
+  {n:255,en:"entire",pl:"cały, całkowity",de:"ganz, vollständig",cat:"Cechy"},
+  {n:256,en:"environment",pl:"środowisko, otoczenie",de:"Umwelt, Umgebung",cat:"Natura"},
+  {n:257,en:"especially",pl:"szczególnie, zwłaszcza",de:"besonders, vor allem",cat:"Podstawowe"},
+  {n:258,en:"establish",pl:"ustanowić, założyć",de:"gründen, etablieren",cat:"Czasowniki"},
+  {n:259,en:"even",pl:"nawet, równy",de:"sogar, gerade",cat:"Podstawowe"},
+  {n:260,en:"evening",pl:"wieczór",de:"Abend",cat:"Czas"},
+  {n:261,en:"event",pl:"wydarzenie, impreza",de:"Veranstaltung, Ereignis",cat:"Rzeczowniki"},
+  {n:262,en:"ever",pl:"kiedykolwiek",de:"jemals",cat:"Czas"},
+  {n:263,en:"every",pl:"każdy",de:"jeder, jedes",cat:"Podstawowe"},
+  {n:264,en:"everybody",pl:"wszyscy",de:"alle, jeder",cat:"Podstawowe"},
+  {n:265,en:"everyone",pl:"wszyscy, każdy",de:"alle, jeder",cat:"Podstawowe"},
+  {n:266,en:"everything",pl:"wszystko",de:"alles",cat:"Podstawowe"},
+  {n:267,en:"evidence",pl:"dowód, świadectwo",de:"Beweis, Nachweis",cat:"Prawo"},
+  {n:268,en:"exactly",pl:"dokładnie",de:"genau",cat:"Podstawowe"},
+  {n:269,en:"example",pl:"przykład",de:"Beispiel",cat:"Rzeczowniki"},
+  {n:270,en:"executive",pl:"dyrektor, wykonawczy",de:"Direktor, leitend",cat:"Praca"},
+  {n:271,en:"exist",pl:"istnieć",de:"existieren, vorhanden sein",cat:"Czasowniki"},
+  {n:272,en:"expect",pl:"oczekiwać, spodziewać się",de:"erwarten",cat:"Czasowniki"},
+  {n:273,en:"experience",pl:"doświadczenie, przeżywać",de:"Erfahrung, erleben",cat:"Rzeczowniki"},
+  {n:274,en:"explain",pl:"wyjaśniać, tłumaczyć",de:"erklären",cat:"Komunikacja"},
+  {n:275,en:"eye",pl:"oko",de:"Auge",cat:"Ciało"},
+  // F
+  {n:276,en:"face",pl:"twarz, stawić czoła",de:"Gesicht, begegnen",cat:"Ciało"},
+  {n:277,en:"fact",pl:"fakt",de:"Tatsache, Fakt",cat:"Rzeczowniki"},
+  {n:278,en:"factor",pl:"czynnik, faktor",de:"Faktor, Einflussgröße",cat:"Rzeczowniki"},
+  {n:279,en:"fail",pl:"nie zdać, zawieść",de:"versagen, scheitern",cat:"Czasowniki"},
+  {n:280,en:"fall",pl:"jesień, upadać, spaść",de:"fallen, Herbst",cat:"Natura"},
+  {n:281,en:"family",pl:"rodzina",de:"Familie",cat:"Rodzina"},
+  {n:282,en:"far",pl:"daleki, daleko",de:"weit, entfernt",cat:"Cechy"},
+  {n:283,en:"fast",pl:"szybki, szybko, pościć",de:"schnell, fasten",cat:"Cechy"},
+  {n:284,en:"father",pl:"ojciec, tata",de:"Vater",cat:"Rodzina"},
+  {n:285,en:"fear",pl:"strach, bać się",de:"Angst, fürchten",cat:"Emocje"},
+  {n:286,en:"federal",pl:"federalny",de:"föderalen, Bundes-",cat:"Polityka"},
+  {n:287,en:"feel",pl:"czuć, odczuwać",de:"fühlen, sich anfühlen",cat:"Emocje"},
+  {n:288,en:"few",pl:"kilka, mało",de:"wenige, einige",cat:"Liczby"},
+  {n:289,en:"field",pl:"pole, dziedzina",de:"Feld, Bereich",cat:"Miejsca"},
+  {n:290,en:"fight",pl:"walczyć, bijatyka",de:"kämpfen, Kampf",cat:"Czasowniki"},
+  {n:291,en:"figure",pl:"cyfra, postać, figurować",de:"Zahl, Figur",cat:"Liczby"},
+  {n:292,en:"fill",pl:"wypełniać, napełniać",de:"füllen, ausfüllen",cat:"Czasowniki"},
+  {n:293,en:"film",pl:"film",de:"Film",cat:"Kultura"},
+  {n:294,en:"final",pl:"końcowy, finał",de:"endgültig, Finale",cat:"Cechy"},
+  {n:295,en:"finally",pl:"wreszcie, w końcu",de:"schließlich, endlich",cat:"Czas"},
+  {n:296,en:"financial",pl:"finansowy",de:"finanziell",cat:"Finanse"},
+  {n:297,en:"find",pl:"znaleźć, odkryć",de:"finden, entdecken",cat:"Czasowniki"},
+  {n:298,en:"fire",pl:"ogień, pożar, strzelać",de:"Feuer, Brand, schießen",cat:"Natura"},
+  {n:299,en:"firm",pl:"firma, twardy",de:"Firma, fest",cat:"Praca"},
+  {n:300,en:"first",pl:"pierwszy, po pierwsze",de:"erst, zuerst",cat:"Liczby"},
+  {n:301,en:"fish",pl:"ryba, łowić ryby",de:"Fisch, fischen",cat:"Jedzenie"},
+  {n:302,en:"five",pl:"pięć",de:"fünf",cat:"Liczby"},
+  {n:303,en:"floor",pl:"podłoga, piętro",de:"Boden, Stockwerk",cat:"Dom"},
+  {n:304,en:"fly",pl:"latać, mucha",de:"fliegen, Fliege",cat:"Transport"},
+  {n:305,en:"focus",pl:"skupić się, uwaga",de:"Fokus, sich konzentrieren",cat:"Czasowniki"},
+  {n:306,en:"follow",pl:"podążać, obserwować",de:"folgen, verfolgen",cat:"Czasowniki"},
+  {n:307,en:"food",pl:"jedzenie, żywność",de:"Essen, Nahrung",cat:"Jedzenie"},
+  {n:308,en:"for",pl:"dla, za, przez",de:"für, wegen",cat:"Podstawowe"},
+  {n:309,en:"force",pl:"siła, zmuszać",de:"Kraft, zwingen",cat:"Rzeczowniki"},
+  {n:310,en:"forget",pl:"zapomnieć",de:"vergessen",cat:"Czasowniki"},
+  {n:311,en:"form",pl:"formularz, forma, tworzyć",de:"Formular, Form, bilden",cat:"Rzeczowniki"},
+  {n:312,en:"forward",pl:"naprzód, przesyłać dalej",de:"vorwärts, weiterleiten",cat:"Podstawowe"},
+  {n:313,en:"four",pl:"cztery",de:"vier",cat:"Liczby"},
+  {n:314,en:"free",pl:"wolny, bezpłatny",de:"frei, kostenlos",cat:"Cechy"},
+  {n:315,en:"friend",pl:"przyjaciel, znajomy",de:"Freund",cat:"Ludzie"},
+  {n:316,en:"from",pl:"z, od, ze",de:"von, aus",cat:"Podstawowe"},
+  {n:317,en:"front",pl:"przód, front",de:"Vorderseite, Front",cat:"Miejsca"},
+  {n:318,en:"full",pl:"pełny, cały",de:"voll, ganz",cat:"Cechy"},
+  {n:319,en:"fund",pl:"fundusz, finansować",de:"Fonds, finanzieren",cat:"Finanse"},
+  {n:320,en:"future",pl:"przyszłość, przyszły",de:"Zukunft, zukünftig",cat:"Czas"},
+  // G
+  {n:321,en:"game",pl:"gra, mecz",de:"Spiel",cat:"Kultura"},
+  {n:322,en:"general",pl:"ogólny, generał",de:"allgemein, General",cat:"Cechy"},
+  {n:323,en:"get",pl:"dostać, zdobyć",de:"bekommen, holen",cat:"Podstawowe"},
+  {n:324,en:"girl",pl:"dziewczyna, dziewczynka",de:"Mädchen",cat:"Ludzie"},
+  {n:325,en:"give",pl:"dawać, dać",de:"geben",cat:"Podstawowe"},
+  {n:326,en:"glass",pl:"szkło, szklanka",de:"Glas",cat:"Przedmioty"},
+  {n:327,en:"go",pl:"iść, jechać",de:"gehen, fahren",cat:"Podstawowe"},
+  {n:328,en:"goal",pl:"cel, bramka",de:"Ziel, Tor",cat:"Rzeczowniki"},
+  {n:329,en:"good",pl:"dobry, dobrze",de:"gut",cat:"Cechy"},
+  {n:330,en:"government",pl:"rząd",de:"Regierung",cat:"Polityka"},
+  {n:331,en:"great",pl:"świetny, wspaniały",de:"toll, großartig",cat:"Cechy"},
+  {n:332,en:"green",pl:"zielony",de:"grün",cat:"Kolory"},
+  {n:333,en:"ground",pl:"ziemia, grunt",de:"Boden, Grund",cat:"Natura"},
+  {n:334,en:"group",pl:"grupa",de:"Gruppe",cat:"Ludzie"},
+  {n:335,en:"grow",pl:"rosnąć, hodować",de:"wachsen, züchten",cat:"Czasowniki"},
+  {n:336,en:"growth",pl:"wzrost, rozwój",de:"Wachstum, Entwicklung",cat:"Rzeczowniki"},
+  {n:337,en:"gun",pl:"pistolet, broń palna",de:"Pistole, Schusswaffe",cat:"Przedmioty"},
+  {n:338,en:"guy",pl:"facet, gość",de:"Typ, Kerl",cat:"Ludzie"},
+  // H
+  {n:339,en:"hair",pl:"włos, włosy",de:"Haar, Haare",cat:"Ciało"},
+  {n:340,en:"half",pl:"połowa, pół",de:"Hälfte, halb",cat:"Liczby"},
+  {n:341,en:"hand",pl:"ręka, dłoń",de:"Hand",cat:"Ciało"},
+  {n:342,en:"happen",pl:"zdarzyć się, wydarzyć",de:"passieren, geschehen",cat:"Czasowniki"},
+  {n:343,en:"happy",pl:"szczęśliwy, zadowolony",de:"glücklich, froh",cat:"Emocje"},
+  {n:344,en:"hard",pl:"twardy, ciężki, trudny",de:"hart, schwer, schwierig",cat:"Cechy"},
+  {n:345,en:"have",pl:"mieć, posiadać",de:"haben",cat:"Podstawowe"},
+  {n:346,en:"he",pl:"on",de:"er",cat:"Podstawowe"},
+  {n:347,en:"head",pl:"głowa, kierować",de:"Kopf, leiten",cat:"Ciało"},
+  {n:348,en:"health",pl:"zdrowie",de:"Gesundheit",cat:"Zdrowie"},
+  {n:349,en:"hear",pl:"słyszeć, słuchać",de:"hören",cat:"Zmysły"},
+  {n:350,en:"heart",pl:"serce",de:"Herz",cat:"Ciało"},
+  {n:351,en:"help",pl:"pomóc, pomoc",de:"helfen, Hilfe",cat:"Czasowniki"},
+  {n:352,en:"her",pl:"jej, ją",de:"ihr, sie (Akk.)",cat:"Podstawowe"},
+  {n:353,en:"here",pl:"tutaj, tu",de:"hier",cat:"Podstawowe"},
+  {n:354,en:"herself",pl:"ona sama, siebie",de:"sie selbst, sich",cat:"Podstawowe"},
+  {n:355,en:"high",pl:"wysoki, wysoko",de:"hoch",cat:"Cechy"},
+  {n:356,en:"him",pl:"jego, mu",de:"ihn, ihm",cat:"Podstawowe"},
+  {n:357,en:"himself",pl:"on sam, siebie",de:"er selbst, sich",cat:"Podstawowe"},
+  {n:358,en:"his",pl:"jego",de:"sein",cat:"Podstawowe"},
+  {n:359,en:"history",pl:"historia",de:"Geschichte",cat:"Nauka"},
+  {n:360,en:"hit",pl:"uderzać, hit, trafić",de:"schlagen, treffen, Hit",cat:"Czasowniki"},
+  {n:361,en:"hold",pl:"trzymać, odbyć się",de:"halten, festhalten",cat:"Czasowniki"},
+  {n:362,en:"home",pl:"dom, do domu",de:"Zuhause, nach Hause",cat:"Dom"},
+  {n:363,en:"hope",pl:"nadzieja, mieć nadzieję",de:"Hoffnung, hoffen",cat:"Emocje"},
+  {n:364,en:"hospital",pl:"szpital",de:"Krankenhaus",cat:"Zdrowie"},
+  {n:365,en:"hot",pl:"gorący",de:"heiß",cat:"Cechy"},
+  {n:366,en:"hotel",pl:"hotel",de:"Hotel",cat:"Miejsca"},
+  {n:367,en:"hour",pl:"godzina",de:"Stunde",cat:"Czas"},
+  {n:368,en:"house",pl:"dom, mieszkanie",de:"Haus",cat:"Dom"},
+  {n:369,en:"how",pl:"jak, w jaki sposób",de:"wie",cat:"Podstawowe"},
+  {n:370,en:"however",pl:"jednak, niemniej",de:"jedoch, dennoch",cat:"Podstawowe"},
+  {n:371,en:"huge",pl:"ogromny, wielki",de:"riesig, gewaltig",cat:"Cechy"},
+  {n:372,en:"human",pl:"człowiek, ludzki",de:"Mensch, menschlich",cat:"Ludzie"},
+  {n:373,en:"hundred",pl:"sto",de:"hundert",cat:"Liczby"},
+  {n:374,en:"husband",pl:"mąż",de:"Ehemann",cat:"Rodzina"},
+  // I
+  {n:375,en:"I",pl:"ja",de:"ich",cat:"Podstawowe"},
+  {n:376,en:"idea",pl:"pomysł, idea",de:"Idee, Vorstellung",cat:"Rzeczowniki"},
+  {n:377,en:"identify",pl:"identyfikować, rozpoznawać",de:"identifizieren, erkennen",cat:"Czasowniki"},
+  {n:378,en:"if",pl:"jeśli, jeżeli",de:"wenn, falls, ob",cat:"Podstawowe"},
+  {n:379,en:"image",pl:"obraz, wizerunek",de:"Bild, Abbild",cat:"Kultura"},
+  {n:380,en:"imagine",pl:"wyobrażać sobie",de:"sich vorstellen",cat:"Czasowniki"},
+  {n:381,en:"impact",pl:"wpływ, oddziaływanie",de:"Einfluss, Auswirkung",cat:"Rzeczowniki"},
+  {n:382,en:"important",pl:"ważny",de:"wichtig",cat:"Cechy"},
+  {n:383,en:"improve",pl:"poprawić, ulepszać",de:"verbessern",cat:"Czasowniki"},
+  {n:384,en:"in",pl:"w, wewnątrz",de:"in, innerhalb",cat:"Podstawowe"},
+  {n:385,en:"include",pl:"zawierać, włączać",de:"beinhalten, einschließen",cat:"Czasowniki"},
+  {n:386,en:"increase",pl:"zwiększać, wzrost",de:"erhöhen, Anstieg",cat:"Czasowniki"},
+  {n:387,en:"indeed",pl:"rzeczywiście, istotnie",de:"tatsächlich, in der Tat",cat:"Podstawowe"},
+  {n:388,en:"indicate",pl:"wskazywać",de:"hinweisen, anzeigen",cat:"Czasowniki"},
+  {n:389,en:"individual",pl:"osoba, jednostka, indywidualny",de:"Person, Einzelperson, individuell",cat:"Ludzie"},
+  {n:390,en:"industry",pl:"przemysł, branża",de:"Industrie, Branche",cat:"Praca"},
+  {n:391,en:"information",pl:"informacja",de:"Information",cat:"Komunikacja"},
+  {n:392,en:"inside",pl:"środek, wewnątrz",de:"innen, innerhalb",cat:"Podstawowe"},
+  {n:393,en:"instead",pl:"zamiast tego",de:"stattdessen",cat:"Podstawowe"},
+  {n:394,en:"institution",pl:"instytucja",de:"Institution, Einrichtung",cat:"Rzeczowniki"},
+  {n:395,en:"interest",pl:"zainteresowanie, interes",de:"Interesse, Zinsen",cat:"Emocje"},
+  {n:396,en:"interesting",pl:"interesujący, ciekawy",de:"interessant",cat:"Cechy"},
+  {n:397,en:"interview",pl:"wywiad, rozmowa kwalifikacyjna",de:"Interview, Vorstellungsgespräch",cat:"Praca"},
+  {n:398,en:"into",pl:"do, w",de:"in, hinein",cat:"Podstawowe"},
+  {n:399,en:"involve",pl:"angażować, obejmować",de:"beinhalten, einbeziehen",cat:"Czasowniki"},
+  {n:400,en:"issue",pl:"kwestia, wydanie, problem",de:"Thema, Problem, Ausgabe",cat:"Rzeczowniki"},
+  {n:401,en:"it",pl:"ono, to",de:"es",cat:"Podstawowe"},
+  {n:402,en:"its",pl:"jego (nijaki), jej (nijaki)",de:"sein, ihr (sächlich)",cat:"Podstawowe"},
+  {n:403,en:"itself",pl:"ono samo, siebie",de:"es selbst, sich",cat:"Podstawowe"},
+  // J
+  {n:404,en:"job",pl:"praca, zajęcie",de:"Arbeit, Job",cat:"Praca"},
+  {n:405,en:"join",pl:"dołączyć, łączyć",de:"beitreten, verbinden",cat:"Czasowniki"},
+  {n:406,en:"just",pl:"właśnie, tylko, po prostu",de:"gerade, nur, einfach",cat:"Podstawowe"},
+  // K
+  {n:407,en:"keep",pl:"trzymać, zachowywać",de:"behalten, halten",cat:"Czasowniki"},
+  {n:408,en:"kill",pl:"zabić, zabijać",de:"töten",cat:"Czasowniki"},
+  {n:409,en:"kind",pl:"rodzaj, typ, miły",de:"Art, freundlich",cat:"Cechy"},
+  {n:410,en:"know",pl:"wiedzieć, znać",de:"wissen, kennen",cat:"Podstawowe"},
+  {n:411,en:"knowledge",pl:"wiedza",de:"Wissen",cat:"Edukacja"},
+  // L
+  {n:412,en:"land",pl:"ziemia, ląd, lądować",de:"Land, landen",cat:"Natura"},
+  {n:413,en:"language",pl:"język",de:"Sprache",cat:"Komunikacja"},
+  {n:414,en:"large",pl:"duży, wielki",de:"groß, umfangreich",cat:"Cechy"},
+  {n:415,en:"last",pl:"ostatni, ostatnio, trwać",de:"letzte, dauern",cat:"Czas"},
+  {n:416,en:"late",pl:"późny, spóźniony",de:"spät, verspätet",cat:"Czas"},
+  {n:417,en:"later",pl:"później",de:"später",cat:"Czas"},
+  {n:418,en:"laugh",pl:"śmiać się, śmiech",de:"lachen, Lachen",cat:"Emocje"},
+  {n:419,en:"law",pl:"prawo, ustawa",de:"Gesetz, Recht",cat:"Prawo"},
+  {n:420,en:"lead",pl:"prowadzić, ołów, przewodzić",de:"führen, leiten",cat:"Czasowniki"},
+  {n:421,en:"leader",pl:"przywódca, lider",de:"Anführer, Leiter",cat:"Ludzie"},
+  {n:422,en:"learn",pl:"uczyć się, dowiadywać się",de:"lernen, erfahren",cat:"Edukacja"},
+  {n:423,en:"least",pl:"najmniej, przynajmniej",de:"wenigste, mindestens",cat:"Podstawowe"},
+  {n:424,en:"leave",pl:"wychodzić, zostawiać",de:"verlassen, hinterlassen",cat:"Czasowniki"},
+  {n:425,en:"left",pl:"lewo, lewy, opuścić",de:"links, verlassen",cat:"Podstawowe"},
+  {n:426,en:"legal",pl:"legalny, prawny",de:"legal, rechtlich",cat:"Prawo"},
+  {n:427,en:"less",pl:"mniej",de:"weniger",cat:"Liczby"},
+  {n:428,en:"let",pl:"pozwolić, wynajmować",de:"lassen, erlauben",cat:"Czasowniki"},
+  {n:429,en:"letter",pl:"list, litera",de:"Brief, Buchstabe",cat:"Komunikacja"},
+  {n:430,en:"level",pl:"poziom, stopień",de:"Niveau, Ebene",cat:"Rzeczowniki"},
+  {n:431,en:"lie",pl:"kłamać, leżeć, kłamstwo",de:"lügen, liegen",cat:"Komunikacja"},
+  {n:432,en:"life",pl:"życie",de:"Leben",cat:"Rzeczowniki"},
+  {n:433,en:"light",pl:"światło, lekki",de:"Licht, leicht",cat:"Cechy"},
+  {n:434,en:"like",pl:"lubić, jak, taki jak",de:"mögen, wie",cat:"Podstawowe"},
+  {n:435,en:"likely",pl:"prawdopodobny",de:"wahrscheinlich",cat:"Cechy"},
+  {n:436,en:"line",pl:"linia, wiersz, kolejka",de:"Linie, Zeile, Schlange",cat:"Rzeczowniki"},
+  {n:437,en:"list",pl:"lista, spisywać",de:"Liste, auflisten",cat:"Rzeczowniki"},
+  {n:438,en:"listen",pl:"słuchać",de:"zuhören",cat:"Zmysły"},
+  {n:439,en:"little",pl:"mały, mało, trochę",de:"klein, wenig",cat:"Cechy"},
+  {n:440,en:"live",pl:"mieszkać, żyć, na żywo",de:"leben, wohnen, live",cat:"Czasowniki"},
+  {n:441,en:"local",pl:"lokalny, miejscowy",de:"lokal, örtlich",cat:"Cechy"},
+  {n:442,en:"long",pl:"długi, długo",de:"lang, lange",cat:"Cechy"},
+  {n:443,en:"look",pl:"patrzeć, wyglądać",de:"schauen, aussehen",cat:"Zmysły"},
+  {n:444,en:"lose",pl:"stracić, przegrać",de:"verlieren",cat:"Czasowniki"},
+  {n:445,en:"loss",pl:"strata, utrata",de:"Verlust",cat:"Rzeczowniki"},
+  {n:446,en:"lot",pl:"dużo, wiele",de:"viel, viele",cat:"Liczby"},
+  {n:447,en:"love",pl:"miłość, kochać",de:"Liebe, lieben",cat:"Emocje"},
+  {n:448,en:"low",pl:"niski, nisko",de:"niedrig, tief",cat:"Cechy"},
+  // M
+  {n:449,en:"machine",pl:"maszyna, urządzenie",de:"Maschine, Gerät",cat:"Technologia"},
+  {n:450,en:"magazine",pl:"magazyn, czasopismo",de:"Zeitschrift, Magazin",cat:"Kultura"},
+  {n:451,en:"main",pl:"główny",de:"Haupt-, wichtigste",cat:"Cechy"},
+  {n:452,en:"maintain",pl:"utrzymywać, twierdzić",de:"aufrechterhalten, behaupten",cat:"Czasowniki"},
+  {n:453,en:"major",pl:"główny, major, studia główne",de:"Haupt-, wichtig",cat:"Cechy"},
+  {n:454,en:"make",pl:"robić, tworzyć, zrobić",de:"machen, herstellen",cat:"Podstawowe"},
+  {n:455,en:"man",pl:"mężczyzna, człowiek",de:"Mann, Mensch",cat:"Ludzie"},
+  {n:456,en:"manage",pl:"zarządzać, radzić sobie",de:"verwalten, schaffen",cat:"Praca"},
+  {n:457,en:"many",pl:"wiele, dużo",de:"viele",cat:"Liczby"},
+  {n:458,en:"market",pl:"rynek, targ",de:"Markt",cat:"Finanse"},
+  {n:459,en:"marriage",pl:"małżeństwo",de:"Ehe, Heirat",cat:"Rodzina"},
+  {n:460,en:"matter",pl:"sprawa, znaczyć",de:"Sache, Angelegenheit, wichtig sein",cat:"Rzeczowniki"},
+  {n:461,en:"may",pl:"móc, maja",de:"dürfen, können, Mai",cat:"Podstawowe"},
+  {n:462,en:"me",pl:"mnie, mi",de:"mich, mir",cat:"Podstawowe"},
+  {n:463,en:"mean",pl:"znaczyć, znaczny, średni",de:"bedeuten, gemein, Durchschnitt",cat:"Komunikacja"},
+  {n:464,en:"measure",pl:"mierzyć, miara",de:"messen, Maß",cat:"Liczby"},
+  {n:465,en:"media",pl:"media",de:"Medien",cat:"Komunikacja"},
+  {n:466,en:"medical",pl:"medyczny, lekarski",de:"medizinisch, ärztlich",cat:"Zdrowie"},
+  {n:467,en:"meet",pl:"spotkać, poznać",de:"treffen, kennenlernen",cat:"Czasowniki"},
+  {n:468,en:"meeting",pl:"spotkanie, zebranie",de:"Treffen, Besprechung",cat:"Praca"},
+  {n:469,en:"member",pl:"członek",de:"Mitglied",cat:"Ludzie"},
+  {n:470,en:"memory",pl:"pamięć, wspomnienie",de:"Erinnerung, Gedächtnis",cat:"Rzeczowniki"},
+  {n:471,en:"message",pl:"wiadomość, przesłanie",de:"Nachricht, Botschaft",cat:"Komunikacja"},
+  {n:472,en:"method",pl:"metoda, sposób",de:"Methode, Verfahren",cat:"Nauka"},
+  {n:473,en:"middle",pl:"środek, środkowy",de:"Mitte, mittlere",cat:"Miejsca"},
+  {n:474,en:"might",pl:"mógłby, potęga",de:"könnte, Macht",cat:"Podstawowe"},
+  {n:475,en:"military",pl:"wojskowy, wojsko",de:"militärisch, Militär",cat:"Polityka"},
+  {n:476,en:"million",pl:"milion",de:"Million",cat:"Liczby"},
+  {n:477,en:"mind",pl:"umysł, rozum",de:"Verstand, Geist",cat:"Rzeczowniki"},
+  {n:478,en:"minute",pl:"minuta",de:"Minute",cat:"Czas"},
+  {n:479,en:"miss",pl:"tęsknić, chybić, panna",de:"vermissen, verpassen, Fräulein",cat:"Emocje"},
+  {n:480,en:"model",pl:"model, wzór",de:"Modell, Muster",cat:"Rzeczowniki"},
+  {n:481,en:"modern",pl:"nowoczesny, współczesny",de:"modern, zeitgemäß",cat:"Cechy"},
+  {n:482,en:"moment",pl:"chwila, moment",de:"Moment, Augenblick",cat:"Czas"},
+  {n:483,en:"money",pl:"pieniądze",de:"Geld",cat:"Finanse"},
+  {n:484,en:"month",pl:"miesiąc",de:"Monat",cat:"Czas"},
+  {n:485,en:"more",pl:"więcej, bardziej",de:"mehr",cat:"Podstawowe"},
+  {n:486,en:"morning",pl:"rano, ranek",de:"Morgen",cat:"Czas"},
+  {n:487,en:"most",pl:"najbardziej, większość",de:"meiste, am meisten",cat:"Podstawowe"},
+  {n:488,en:"mother",pl:"matka, mama",de:"Mutter",cat:"Rodzina"},
+  {n:489,en:"move",pl:"ruszać się, ruch",de:"bewegen, Zug",cat:"Czasowniki"},
+  {n:490,en:"movement",pl:"ruch, poruszenie",de:"Bewegung",cat:"Rzeczowniki"},
+  {n:491,en:"much",pl:"dużo, bardzo",de:"viel, sehr",cat:"Liczby"},
+  {n:492,en:"music",pl:"muzyka",de:"Musik",cat:"Kultura"},
+  {n:493,en:"must",pl:"musieć, musi",de:"müssen",cat:"Podstawowe"},
+  {n:494,en:"my",pl:"mój, moja, moje",de:"mein",cat:"Podstawowe"},
+  {n:495,en:"myself",pl:"ja sam, siebie",de:"ich selbst, mich",cat:"Podstawowe"},
+  // N
+  {n:496,en:"name",pl:"imię, nazwa, nazwać",de:"Name, nennen",cat:"Komunikacja"},
+  {n:497,en:"national",pl:"narodowy, krajowy",de:"national, staatlich",cat:"Polityka"},
+  {n:498,en:"nature",pl:"natura, przyroda",de:"Natur",cat:"Natura"},
+  {n:499,en:"near",pl:"blisko, niedaleko",de:"nah, in der Nähe",cat:"Miejsca"},
+  {n:500,en:"nearly",pl:"prawie, niemal",de:"fast, beinahe",cat:"Podstawowe"},
+  {n:501,en:"necessary",pl:"konieczny, niezbędny",de:"notwendig, nötig",cat:"Cechy"},
+  {n:502,en:"need",pl:"potrzebować, potrzeba",de:"brauchen, Bedarf",cat:"Podstawowe"},
+  {n:503,en:"network",pl:"sieć",de:"Netzwerk",cat:"Technologia"},
+  {n:504,en:"never",pl:"nigdy",de:"nie, niemals",cat:"Czas"},
+  {n:505,en:"new",pl:"nowy",de:"neu",cat:"Cechy"},
+  {n:506,en:"news",pl:"wiadomości, aktualności",de:"Nachrichten, Neuigkeiten",cat:"Komunikacja"},
+  {n:507,en:"next",pl:"następny, obok",de:"nächste, daneben",cat:"Czas"},
+  {n:508,en:"night",pl:"noc, wieczór",de:"Nacht, Abend",cat:"Czas"},
+  {n:509,en:"no",pl:"nie",de:"nein, kein",cat:"Podstawowe"},
+  {n:510,en:"north",pl:"północ",de:"Norden",cat:"Miejsca"},
+  {n:511,en:"not",pl:"nie",de:"nicht",cat:"Podstawowe"},
+  {n:512,en:"nothing",pl:"nic",de:"nichts",cat:"Podstawowe"},
+  {n:513,en:"notice",pl:"zauważyć, ogłoszenie",de:"bemerken, Ankündigung",cat:"Czasowniki"},
+  {n:514,en:"now",pl:"teraz, już",de:"jetzt, nun",cat:"Czas"},
+  {n:515,en:"number",pl:"numer, liczba",de:"Nummer, Zahl",cat:"Liczby"},
+  // O
+  {n:516,en:"of",pl:"z, od (przynależność)",de:"von, aus (Zugehörigkeit)",cat:"Podstawowe"},
+  {n:517,en:"off",pl:"wyłączony, precz",de:"aus, weg",cat:"Podstawowe"},
+  {n:518,en:"offer",pl:"oferować, oferta",de:"anbieten, Angebot",cat:"Czasowniki"},
+  {n:519,en:"office",pl:"biuro, urząd",de:"Büro, Amt",cat:"Praca"},
+  {n:520,en:"officer",pl:"oficer, funkcjonariusz",de:"Offizier, Beamter",cat:"Praca"},
+  {n:521,en:"official",pl:"urzędnik, oficjalny",de:"Beamter, offiziell",cat:"Praca"},
+  {n:522,en:"often",pl:"często",de:"oft, häufig",cat:"Czas"},
+  {n:523,en:"ok",pl:"okej, w porządku",de:"okay, in Ordnung",cat:"Podstawowe"},
+  {n:524,en:"old",pl:"stary, dawny",de:"alt",cat:"Cechy"},
+  {n:525,en:"on",pl:"na (powierzchni), włączony",de:"auf, an, ein",cat:"Podstawowe"},
+  {n:526,en:"once",pl:"raz, kiedyś",de:"einmal, früher",cat:"Czas"},
+  {n:527,en:"one",pl:"jeden",de:"eins, ein",cat:"Liczby"},
+  {n:528,en:"only",pl:"tylko, jedyny",de:"nur, einzig",cat:"Podstawowe"},
+  {n:529,en:"open",pl:"otworzyć, otwarty",de:"öffnen, offen",cat:"Cechy"},
+  {n:530,en:"opportunity",pl:"okazja, szansa",de:"Gelegenheit, Chance",cat:"Rzeczowniki"},
+  {n:531,en:"or",pl:"lub, albo",de:"oder",cat:"Podstawowe"},
+  {n:532,en:"order",pl:"zamówienie, kolejność, porządek",de:"Bestellung, Reihenfolge, Ordnung",cat:"Rzeczowniki"},
+  {n:533,en:"organization",pl:"organizacja",de:"Organisation",cat:"Praca"},
+  {n:534,en:"other",pl:"inny, inni",de:"andere",cat:"Podstawowe"},
+  {n:535,en:"our",pl:"nasz",de:"unser",cat:"Podstawowe"},
+  {n:536,en:"out",pl:"na zewnątrz, wyłączony",de:"aus, draußen",cat:"Podstawowe"},
+  {n:537,en:"outside",pl:"na zewnątrz, poza",de:"draußen, außerhalb",cat:"Miejsca"},
+  {n:538,en:"over",pl:"nad, po, ponad, skończone",de:"über, vorbei",cat:"Podstawowe"},
+  {n:539,en:"own",pl:"własny, posiadać",de:"eigen, besitzen",cat:"Cechy"},
+  // P
+  {n:540,en:"paper",pl:"papier, gazeta",de:"Papier, Zeitung",cat:"Przedmioty"},
+  {n:541,en:"parent",pl:"rodzic",de:"Elternteil, Eltern",cat:"Rodzina"},
+  {n:542,en:"park",pl:"park, parkować",de:"Park, parken",cat:"Miejsca"},
+  {n:543,en:"part",pl:"część, rola",de:"Teil, Rolle",cat:"Rzeczowniki"},
+  {n:544,en:"particular",pl:"szczególny, konkretny",de:"besondere, spezifisch",cat:"Cechy"},
+  {n:545,en:"particularly",pl:"szczególnie",de:"besonders",cat:"Podstawowe"},
+  {n:546,en:"party",pl:"impreza, partia",de:"Party, Partei",cat:"Kultura"},
+  {n:547,en:"pass",pl:"przejść, zdać, podać",de:"bestehen, vorbeigehen",cat:"Czasowniki"},
+  {n:548,en:"past",pl:"przeszłość, miniony",de:"Vergangenheit, vergangen",cat:"Czas"},
+  {n:549,en:"pay",pl:"płacić, zapłata",de:"zahlen, bezahlen",cat:"Finanse"},
+  {n:550,en:"peace",pl:"pokój, spokój",de:"Frieden",cat:"Rzeczowniki"},
+  {n:551,en:"people",pl:"ludzie, naród",de:"Menschen, Leute",cat:"Ludzie"},
+  {n:552,en:"per",pl:"na, za (jednostkę)",de:"pro, je",cat:"Podstawowe"},
+  {n:553,en:"perform",pl:"wykonywać, grać",de:"aufführen, ausführen",cat:"Czasowniki"},
+  {n:554,en:"performance",pl:"wydajność, spektakl",de:"Leistung, Aufführung",cat:"Praca"},
+  {n:555,en:"perhaps",pl:"być może, chyba",de:"vielleicht",cat:"Podstawowe"},
+  {n:556,en:"period",pl:"okres, punkt",de:"Zeitraum, Punkt",cat:"Czas"},
+  {n:557,en:"person",pl:"osoba, człowiek",de:"Person, Mensch",cat:"Ludzie"},
+  {n:558,en:"personal",pl:"osobisty, prywatny",de:"persönlich, privat",cat:"Cechy"},
+  {n:559,en:"phone",pl:"telefon",de:"Telefon",cat:"Technologia"},
+  {n:560,en:"physical",pl:"fizyczny",de:"physisch, körperlich",cat:"Nauka"},
+  {n:561,en:"pick",pl:"wybierać, zbierać",de:"pflücken, auswählen",cat:"Czasowniki"},
+  {n:562,en:"picture",pl:"obraz, zdjęcie",de:"Bild, Foto",cat:"Kultura"},
+  {n:563,en:"piece",pl:"kawałek, utwór",de:"Stück",cat:"Liczby"},
+  {n:564,en:"place",pl:"miejsce, umieścić",de:"Ort, Platz, stellen",cat:"Miejsca"},
+  {n:565,en:"plan",pl:"plan, zaplanować",de:"Plan, planen",cat:"Rzeczowniki"},
+  {n:566,en:"play",pl:"grać, sztuka teatralna",de:"spielen, Theaterstück",cat:"Kultura"},
+  {n:567,en:"player",pl:"gracz, zawodnik",de:"Spieler",cat:"Ludzie"},
+  {n:568,en:"point",pl:"punkt, wskazać",de:"Punkt, zeigen",cat:"Liczby"},
+  {n:569,en:"police",pl:"policja",de:"Polizei",cat:"Prawo"},
+  {n:570,en:"policy",pl:"polityka, zasady",de:"Politik, Grundsatz",cat:"Polityka"},
+  {n:571,en:"political",pl:"polityczny",de:"politisch",cat:"Polityka"},
+  {n:572,en:"politics",pl:"polityka",de:"Politik",cat:"Polityka"},
+  {n:573,en:"poor",pl:"biedny, ubogi",de:"arm, schlecht",cat:"Cechy"},
+  {n:574,en:"popular",pl:"popularny",de:"populär, beliebt",cat:"Cechy"},
+  {n:575,en:"population",pl:"populacja, ludność",de:"Bevölkerung",cat:"Ludzie"},
+  {n:576,en:"position",pl:"pozycja, stanowisko",de:"Position, Stelle",cat:"Praca"},
+  {n:577,en:"possible",pl:"możliwy",de:"möglich",cat:"Cechy"},
+  {n:578,en:"power",pl:"moc, władza",de:"Macht, Kraft, Strom",cat:"Rzeczowniki"},
+  {n:579,en:"practice",pl:"praktyka, ćwiczyć",de:"Praxis, üben",cat:"Rzeczowniki"},
+  {n:580,en:"prepare",pl:"przygotować",de:"vorbereiten",cat:"Czasowniki"},
+  {n:581,en:"president",pl:"prezydent",de:"Präsident",cat:"Polityka"},
+  {n:582,en:"pressure",pl:"ciśnienie, nacisk",de:"Druck",cat:"Rzeczowniki"},
+  {n:583,en:"price",pl:"cena",de:"Preis",cat:"Finanse"},
+  {n:584,en:"private",pl:"prywatny",de:"privat",cat:"Cechy"},
+  {n:585,en:"probably",pl:"prawdopodobnie",de:"wahrscheinlich",cat:"Podstawowe"},
+  {n:586,en:"problem",pl:"problem, zadanie",de:"Problem",cat:"Rzeczowniki"},
+  {n:587,en:"process",pl:"proces, przetwarzać",de:"Prozess, verarbeiten",cat:"Rzeczowniki"},
+  {n:588,en:"produce",pl:"produkować, wywołać",de:"produzieren, herstellen",cat:"Czasowniki"},
+  {n:589,en:"product",pl:"produkt",de:"Produkt",cat:"Praca"},
+  {n:590,en:"program",pl:"program",de:"Programm",cat:"Technologia"},
+  {n:591,en:"project",pl:"projekt",de:"Projekt",cat:"Praca"},
+  {n:592,en:"property",pl:"własność, nieruchomość",de:"Eigentum, Immobilie",cat:"Finanse"},
+  {n:593,en:"protect",pl:"chronić, ochraniać",de:"schützen",cat:"Czasowniki"},
+  {n:594,en:"prove",pl:"udowodnić, okazać się",de:"beweisen",cat:"Czasowniki"},
+  {n:595,en:"provide",pl:"zapewniać, dostarczać",de:"bereitstellen, liefern",cat:"Czasowniki"},
+  {n:596,en:"public",pl:"publiczny, społeczeństwo",de:"öffentlich, Öffentlichkeit",cat:"Cechy"},
+  {n:597,en:"pull",pl:"ciągnąć",de:"ziehen",cat:"Czasowniki"},
+  {n:598,en:"purpose",pl:"cel, zamiar",de:"Zweck, Ziel",cat:"Rzeczowniki"},
+  {n:599,en:"push",pl:"pchać, naciskać",de:"drücken, schieben",cat:"Czasowniki"},
+  {n:600,en:"put",pl:"kłaść, położyć",de:"legen, stellen, setzen",cat:"Podstawowe"},
+  // Q
+  {n:601,en:"question",pl:"pytanie, kwestionować",de:"Frage, hinterfragen",cat:"Komunikacja"},
+  {n:602,en:"quickly",pl:"szybko",de:"schnell",cat:"Cechy"},
+  {n:603,en:"quite",pl:"dość, całkiem",de:"ziemlich, ganz",cat:"Podstawowe"},
+  // R
+  {n:604,en:"race",pl:"wyścig, rasa",de:"Rennen, Rasse",cat:"Rzeczowniki"},
+  {n:605,en:"radio",pl:"radio",de:"Radio",cat:"Technologia"},
+  {n:606,en:"raise",pl:"podnosić, zbierać, wychowywać",de:"erhöhen, aufziehen",cat:"Czasowniki"},
+  {n:607,en:"reach",pl:"dosięgnąć, osiągnąć",de:"erreichen",cat:"Czasowniki"},
+  {n:608,en:"read",pl:"czytać",de:"lesen",cat:"Edukacja"},
+  {n:609,en:"ready",pl:"gotowy",de:"bereit, fertig",cat:"Cechy"},
+  {n:610,en:"real",pl:"prawdziwy, realny",de:"real, wirklich",cat:"Cechy"},
+  {n:611,en:"reality",pl:"rzeczywistość",de:"Realität, Wirklichkeit",cat:"Rzeczowniki"},
+  {n:612,en:"realize",pl:"uświadomić sobie",de:"erkennen, realisieren",cat:"Czasowniki"},
+  {n:613,en:"reason",pl:"powód, przyczyna",de:"Grund, Ursache",cat:"Rzeczowniki"},
+  {n:614,en:"receive",pl:"otrzymywać",de:"erhalten, bekommen",cat:"Czasowniki"},
+  {n:615,en:"recent",pl:"niedawny, ostatni",de:"kürzlich, neu",cat:"Czas"},
+  {n:616,en:"recently",pl:"ostatnio",de:"kürzlich, neulich",cat:"Czas"},
+  {n:617,en:"reduce",pl:"zmniejszyć, redukować",de:"reduzieren, verringern",cat:"Czasowniki"},
+  {n:618,en:"relate",pl:"odnosić się, powiązać",de:"beziehen, in Beziehung stehen",cat:"Czasowniki"},
+  {n:619,en:"relationship",pl:"relacja, związek",de:"Beziehung",cat:"Rzeczowniki"},
+  {n:620,en:"religious",pl:"religijny",de:"religiös",cat:"Kultura"},
+  {n:621,en:"remain",pl:"pozostawać",de:"bleiben",cat:"Czasowniki"},
+  {n:622,en:"remember",pl:"pamiętać",de:"sich erinnern",cat:"Czasowniki"},
+  {n:623,en:"remove",pl:"usunąć, zdejmować",de:"entfernen",cat:"Czasowniki"},
+  {n:624,en:"report",pl:"raport, relacja, zgłaszać",de:"Bericht, berichten",cat:"Komunikacja"},
+  {n:625,en:"represent",pl:"reprezentować",de:"vertreten, darstellen",cat:"Czasowniki"},
+  {n:626,en:"Republican",pl:"Republikanin",de:"Republikaner",cat:"Polityka"},
+  {n:627,en:"require",pl:"wymagać",de:"erfordern, benötigen",cat:"Czasowniki"},
+  {n:628,en:"research",pl:"badania, badać",de:"Forschung, forschen",cat:"Nauka"},
+  {n:629,en:"resource",pl:"zasób, surowiec",de:"Ressource, Mittel",cat:"Rzeczowniki"},
+  {n:630,en:"response",pl:"odpowiedź, reakcja",de:"Antwort, Reaktion",cat:"Komunikacja"},
+  {n:631,en:"responsibility",pl:"odpowiedzialność",de:"Verantwortung",cat:"Rzeczowniki"},
+  {n:632,en:"rest",pl:"odpoczywać, reszta",de:"Ruhe, ausruhen, Rest",cat:"Czasowniki"},
+  {n:633,en:"result",pl:"wynik, rezultat",de:"Ergebnis, Resultat",cat:"Rzeczowniki"},
+  {n:634,en:"return",pl:"powrócić, zwracać",de:"zurückkehren, zurückgeben",cat:"Czasowniki"},
+  {n:635,en:"reveal",pl:"ujawniać, zdradzać",de:"enthüllen, offenbaren",cat:"Komunikacja"},
+  {n:636,en:"rich",pl:"bogaty",de:"reich",cat:"Cechy"},
+  {n:637,en:"right",pl:"prawy, prawo, właściwy",de:"rechts, Recht, richtig",cat:"Cechy"},
+  {n:638,en:"rise",pl:"rosnąć, wschód",de:"steigen, Aufstieg",cat:"Czasowniki"},
+  {n:639,en:"risk",pl:"ryzyko, ryzykować",de:"Risiko, riskieren",cat:"Rzeczowniki"},
+  {n:640,en:"road",pl:"droga, ulica",de:"Straße, Weg",cat:"Transport"},
+  {n:641,en:"role",pl:"rola",de:"Rolle",cat:"Praca"},
+  {n:642,en:"room",pl:"pokój, miejsce",de:"Zimmer, Raum",cat:"Dom"},
+  {n:643,en:"rule",pl:"zasada, reguła, rządzić",de:"Regel, herrschen",cat:"Prawo"},
+  {n:644,en:"run",pl:"biegać, uruchamiać",de:"laufen, ausführen",cat:"Czasowniki"},
+  // S
+  {n:645,en:"same",pl:"ten sam, taki sam",de:"gleiche, dieselbe",cat:"Cechy"},
+  {n:646,en:"save",pl:"oszczędzać, ratować",de:"sparen, retten",cat:"Czasowniki"},
+  {n:647,en:"say",pl:"mówić, powiedzieć",de:"sagen",cat:"Komunikacja"},
+  {n:648,en:"school",pl:"szkoła",de:"Schule",cat:"Edukacja"},
+  {n:649,en:"science",pl:"nauka, wiedza",de:"Wissenschaft",cat:"Nauka"},
+  {n:650,en:"season",pl:"sezon, pora roku",de:"Jahreszeit, Saison",cat:"Czas"},
+  {n:651,en:"second",pl:"drugi, sekunda",de:"zweite, Sekunde",cat:"Czas"},
+  {n:652,en:"security",pl:"bezpieczeństwo, ochrona",de:"Sicherheit, Schutz",cat:"Polityka"},
+  {n:653,en:"see",pl:"widzieć, zobaczyć",de:"sehen",cat:"Zmysły"},
+  {n:654,en:"seek",pl:"szukać, dążyć",de:"suchen, anstreben",cat:"Czasowniki"},
+  {n:655,en:"seem",pl:"wydawać się",de:"scheinen",cat:"Czasowniki"},
+  {n:656,en:"sell",pl:"sprzedawać",de:"verkaufen",cat:"Finanse"},
+  {n:657,en:"send",pl:"wysyłać",de:"senden, schicken",cat:"Komunikacja"},
+  {n:658,en:"serious",pl:"poważny",de:"ernst, ernsthaft",cat:"Cechy"},
+  {n:659,en:"serve",pl:"służyć, podawać",de:"dienen, servieren",cat:"Czasowniki"},
+  {n:660,en:"service",pl:"usługa, służba",de:"Dienst, Service",cat:"Praca"},
+  {n:661,en:"set",pl:"ustawiać, zestaw",de:"setzen, Satz, einstellen",cat:"Czasowniki"},
+  {n:662,en:"seven",pl:"siedem",de:"sieben",cat:"Liczby"},
+  {n:663,en:"share",pl:"udostępniać, akcja",de:"teilen, Anteil",cat:"Komunikacja"},
+  {n:664,en:"she",pl:"ona",de:"sie",cat:"Podstawowe"},
+  {n:665,en:"shoot",pl:"strzelać, kręcić film",de:"schießen, drehen",cat:"Czasowniki"},
+  {n:666,en:"short",pl:"krótki, niski",de:"kurz, klein",cat:"Cechy"},
+  {n:667,en:"should",pl:"powinien",de:"sollte, sollen",cat:"Podstawowe"},
+  {n:668,en:"show",pl:"pokazywać, program",de:"zeigen, Sendung",cat:"Komunikacja"},
+  {n:669,en:"side",pl:"strona, bok",de:"Seite",cat:"Rzeczowniki"},
+  {n:670,en:"sign",pl:"znak, sygnał, podpisać",de:"Zeichen, unterschreiben",cat:"Komunikacja"},
+  {n:671,en:"significant",pl:"znaczący, istotny",de:"bedeutend, wichtig",cat:"Cechy"},
+  {n:672,en:"similar",pl:"podobny",de:"ähnlich",cat:"Cechy"},
+  {n:673,en:"simple",pl:"prosty, zwykły",de:"einfach, simpel",cat:"Cechy"},
+  {n:674,en:"simply",pl:"po prostu",de:"einfach, schlicht",cat:"Podstawowe"},
+  {n:675,en:"since",pl:"od, ponieważ",de:"seit, da",cat:"Czas"},
+  {n:676,en:"single",pl:"pojedynczy, samotny",de:"einzeln, ledig",cat:"Cechy"},
+  {n:677,en:"sister",pl:"siostra",de:"Schwester",cat:"Rodzina"},
+  {n:678,en:"sit",pl:"siedzieć",de:"sitzen",cat:"Czasowniki"},
+  {n:679,en:"situation",pl:"sytuacja",de:"Situation, Lage",cat:"Rzeczowniki"},
+  {n:680,en:"six",pl:"sześć",de:"sechs",cat:"Liczby"},
+  {n:681,en:"size",pl:"rozmiar, wielkość",de:"Größe, Ausmaß",cat:"Liczby"},
+  {n:682,en:"small",pl:"mały",de:"klein",cat:"Cechy"},
+  {n:683,en:"so",pl:"więc, tak",de:"so, also",cat:"Podstawowe"},
+  {n:684,en:"social",pl:"społeczny, towarzyski",de:"sozial, gesellschaftlich",cat:"Kultura"},
+  {n:685,en:"society",pl:"społeczeństwo",de:"Gesellschaft",cat:"Ludzie"},
+  {n:686,en:"soldier",pl:"żołnierz",de:"Soldat",cat:"Polityka"},
+  {n:687,en:"some",pl:"trochę, kilka, jakiś",de:"etwas, einige",cat:"Podstawowe"},
+  {n:688,en:"someone",pl:"ktoś",de:"jemand",cat:"Podstawowe"},
+  {n:689,en:"something",pl:"coś",de:"etwas",cat:"Podstawowe"},
+  {n:690,en:"sometimes",pl:"czasami, niekiedy",de:"manchmal",cat:"Czas"},
+  {n:691,en:"son",pl:"syn",de:"Sohn",cat:"Rodzina"},
+  {n:692,en:"song",pl:"piosenka, pieśń",de:"Lied",cat:"Kultura"},
+  {n:693,en:"soon",pl:"wkrótce, niedługo",de:"bald",cat:"Czas"},
+  {n:694,en:"sort",pl:"sortować, rodzaj",de:"Art, sortieren",cat:"Rzeczowniki"},
+  {n:695,en:"sound",pl:"dźwięk, brzmieć",de:"Klang, klingen",cat:"Zmysły"},
+  {n:696,en:"south",pl:"południe",de:"Süden",cat:"Miejsca"},
+  {n:697,en:"space",pl:"przestrzeń, kosmos",de:"Raum, Weltraum",cat:"Nauka"},
+  {n:698,en:"speak",pl:"mówić, przemawiać",de:"sprechen",cat:"Komunikacja"},
+  {n:699,en:"special",pl:"specjalny, wyjątkowy",de:"besondere, speziell",cat:"Cechy"},
+  {n:700,en:"spend",pl:"spędzać, wydawać",de:"ausgeben, verbringen",cat:"Finanse"},
+  {n:701,en:"spring",pl:"wiosna, wiosek",de:"Frühling, Feder",cat:"Natura"},
+  {n:702,en:"staff",pl:"personel, kadra",de:"Personal, Mitarbeiter",cat:"Praca"},
+  {n:703,en:"stand",pl:"stać, wytrzymać",de:"stehen, aushalten",cat:"Czasowniki"},
+  {n:704,en:"standard",pl:"standard, norma",de:"Standard, Norm",cat:"Rzeczowniki"},
+  {n:705,en:"start",pl:"zacząć, start",de:"beginnen, starten, Start",cat:"Czasowniki"},
+  {n:706,en:"state",pl:"stan, państwo, stwierdzać",de:"Staat, Zustand, angeben",cat:"Polityka"},
+  {n:707,en:"stay",pl:"zostać, pobyt",de:"bleiben, Aufenthalt",cat:"Czasowniki"},
+  {n:708,en:"step",pl:"krok",de:"Schritt",cat:"Rzeczowniki"},
+  {n:709,en:"still",pl:"nadal, jeszcze, nieruchomy",de:"noch, immer noch, still",cat:"Podstawowe"},
+  {n:710,en:"stop",pl:"zatrzymać, przestać",de:"stoppen, aufhören",cat:"Czasowniki"},
+  {n:711,en:"story",pl:"historia, opowiadanie",de:"Geschichte, Erzählung",cat:"Kultura"},
+  {n:712,en:"strategy",pl:"strategia",de:"Strategie",cat:"Praca"},
+  {n:713,en:"street",pl:"ulica",de:"Straße",cat:"Miejsca"},
+  {n:714,en:"strong",pl:"silny, mocny",de:"stark",cat:"Cechy"},
+  {n:715,en:"structure",pl:"struktura, budowa",de:"Struktur, Aufbau",cat:"Rzeczowniki"},
+  {n:716,en:"student",pl:"student, uczeń",de:"Student, Schüler",cat:"Edukacja"},
+  {n:717,en:"study",pl:"studiować, badanie",de:"studieren, Studie",cat:"Edukacja"},
+  {n:718,en:"stuff",pl:"rzeczy, materiał",de:"Zeug, Material",cat:"Przedmioty"},
+  {n:719,en:"subject",pl:"temat, przedmiot, podmiot",de:"Thema, Fach, Subjekt",cat:"Edukacja"},
+  {n:720,en:"success",pl:"sukces, powodzenie",de:"Erfolg",cat:"Rzeczowniki"},
+  {n:721,en:"such",pl:"taki, tak",de:"solche, so",cat:"Podstawowe"},
+  {n:722,en:"suggest",pl:"sugerować, proponować",de:"vorschlagen, anregen",cat:"Komunikacja"},
+  {n:723,en:"summer",pl:"lato",de:"Sommer",cat:"Natura"},
+  {n:724,en:"support",pl:"wspierać, wsparcie",de:"unterstützen, Unterstützung",cat:"Czasowniki"},
+  {n:725,en:"sure",pl:"pewny, oczywiście",de:"sicher, natürlich",cat:"Cechy"},
+  {n:726,en:"system",pl:"system, układ",de:"System",cat:"Technologia"},
+  // T
+  {n:727,en:"table",pl:"stół, tabela",de:"Tisch, Tabelle",cat:"Dom"},
+  {n:728,en:"take",pl:"brać, wziąć",de:"nehmen, mitnehmen",cat:"Podstawowe"},
+  {n:729,en:"talk",pl:"rozmawiać, mówić",de:"reden, sprechen",cat:"Komunikacja"},
+  {n:730,en:"task",pl:"zadanie, obowiązek",de:"Aufgabe, Pflicht",cat:"Praca"},
+  {n:731,en:"tax",pl:"podatek",de:"Steuer",cat:"Finanse"},
+  {n:732,en:"teach",pl:"uczyć, nauczać",de:"unterrichten, lehren",cat:"Edukacja"},
+  {n:733,en:"teacher",pl:"nauczyciel",de:"Lehrer",cat:"Edukacja"},
+  {n:734,en:"team",pl:"drużyna, zespół",de:"Team, Mannschaft",cat:"Praca"},
+  {n:735,en:"technology",pl:"technologia",de:"Technologie",cat:"Technologia"},
+  {n:736,en:"tell",pl:"mówić, powiedzieć",de:"erzählen, sagen",cat:"Komunikacja"},
+  {n:737,en:"ten",pl:"dziesięć",de:"zehn",cat:"Liczby"},
+  {n:738,en:"term",pl:"termin, semestr",de:"Begriff, Semester",cat:"Edukacja"},
+  {n:739,en:"test",pl:"test, sprawdzian, testować",de:"Test, prüfen",cat:"Edukacja"},
+  {n:740,en:"than",pl:"niż, od",de:"als, denn",cat:"Podstawowe"},
+  {n:741,en:"that",pl:"że, ten, tamten",de:"dass, jener",cat:"Podstawowe"},
+  {n:742,en:"the",pl:"przedimek określony",de:"bestimmter Artikel",cat:"Podstawowe"},
+  {n:743,en:"their",pl:"ich",de:"ihr (Plural)",cat:"Podstawowe"},
+  {n:744,en:"them",pl:"ich, im",de:"sie, ihnen (Akk/Dat)",cat:"Podstawowe"},
+  {n:745,en:"then",pl:"potem, wtedy",de:"dann, danach",cat:"Czas"},
+  {n:746,en:"theory",pl:"teoria",de:"Theorie",cat:"Nauka"},
+  {n:747,en:"there",pl:"tam",de:"dort, da",cat:"Podstawowe"},
+  {n:748,en:"these",pl:"te, ci",de:"diese",cat:"Podstawowe"},
+  {n:749,en:"they",pl:"oni, one",de:"sie (Plural)",cat:"Podstawowe"},
+  {n:750,en:"thing",pl:"rzecz, sprawa",de:"Ding, Sache",cat:"Rzeczowniki"},
+  {n:751,en:"think",pl:"myśleć, sądzić",de:"denken, meinen",cat:"Podstawowe"},
+  {n:752,en:"third",pl:"trzeci",de:"dritte",cat:"Liczby"},
+  {n:753,en:"this",pl:"ten, ta, to",de:"dieser, diese, dieses",cat:"Podstawowe"},
+  {n:754,en:"those",pl:"tamci, tamte",de:"jene",cat:"Podstawowe"},
+  {n:755,en:"though",pl:"chociaż, jednak",de:"obwohl, jedoch",cat:"Podstawowe"},
+  {n:756,en:"thought",pl:"myśl, pomysł",de:"Gedanke, Idee",cat:"Rzeczowniki"},
+  {n:757,en:"thousand",pl:"tysiąc",de:"tausend",cat:"Liczby"},
+  {n:758,en:"three",pl:"trzy",de:"drei",cat:"Liczby"},
+  {n:759,en:"through",pl:"przez, po, skończone",de:"durch, vorbei",cat:"Podstawowe"},
+  {n:760,en:"time",pl:"czas, pora, razy",de:"Zeit, Mal",cat:"Czas"},
+  {n:761,en:"today",pl:"dzisiaj",de:"heute",cat:"Czas"},
+  {n:762,en:"together",pl:"razem",de:"zusammen",cat:"Podstawowe"},
+  {n:763,en:"tonight",pl:"dziś wieczór",de:"heute Abend",cat:"Czas"},
+  {n:764,en:"too",pl:"też, zbyt",de:"auch, zu",cat:"Podstawowe"},
+  {n:765,en:"top",pl:"góra, szczyt, najlepszy",de:"oben, Spitze, beste",cat:"Cechy"},
+  {n:766,en:"total",pl:"całkowity, ogółem",de:"gesamt, insgesamt",cat:"Liczby"},
+  {n:767,en:"toward",pl:"ku, w kierunku",de:"in Richtung auf",cat:"Podstawowe"},
+  {n:768,en:"town",pl:"miasteczko, miasto",de:"Kleinstadt, Ort",cat:"Miejsca"},
+  {n:769,en:"trade",pl:"handel, zawód",de:"Handel, Beruf",cat:"Finanse"},
+  {n:770,en:"travel",pl:"podróżować, podróż",de:"reisen, Reise",cat:"Transport"},
+  {n:771,en:"treat",pl:"traktować, leczyć, przysmak",de:"behandeln, Leckerbissen",cat:"Czasowniki"},
+  {n:772,en:"tree",pl:"drzewo",de:"Baum",cat:"Natura"},
+  {n:773,en:"trial",pl:"proces sądowy, próba",de:"Gerichtsverfahren, Versuch",cat:"Prawo"},
+  {n:774,en:"trouble",pl:"kłopot, problem",de:"Ärger, Problem",cat:"Rzeczowniki"},
+  {n:775,en:"true",pl:"prawdziwy, prawda",de:"wahr, echt",cat:"Cechy"},
+  {n:776,en:"truth",pl:"prawda",de:"Wahrheit",cat:"Rzeczowniki"},
+  {n:777,en:"try",pl:"próbować, starać się",de:"versuchen",cat:"Podstawowe"},
+  {n:778,en:"turn",pl:"obrót, skręcić",de:"drehen, wenden",cat:"Czasowniki"},
+  {n:779,en:"two",pl:"dwa",de:"zwei",cat:"Liczby"},
+  {n:780,en:"type",pl:"typ, rodzaj, pisać",de:"Typ, Art, tippen",cat:"Rzeczowniki"},
+  // U
+  {n:781,en:"under",pl:"pod, mniej niż",de:"unter, weniger als",cat:"Podstawowe"},
+  {n:782,en:"understand",pl:"rozumieć",de:"verstehen",cat:"Czasowniki"},
+  {n:783,en:"until",pl:"do, dopóki",de:"bis, solange",cat:"Czas"},
+  {n:784,en:"up",pl:"na górę, w górę",de:"hinauf, oben",cat:"Podstawowe"},
+  {n:785,en:"upon",pl:"na, po",de:"auf, nach",cat:"Podstawowe"},
+  {n:786,en:"use",pl:"używać, użycie",de:"benutzen, Verwendung",cat:"Podstawowe"},
+  {n:787,en:"usually",pl:"zwykle, zazwyczaj",de:"normalerweise, gewöhnlich",cat:"Czas"},
+  // V
+  {n:788,en:"value",pl:"wartość, cenić",de:"Wert, schätzen",cat:"Finanse"},
+  {n:789,en:"various",pl:"różny, rozmaity",de:"verschieden, vielfältig",cat:"Cechy"},
+  {n:790,en:"very",pl:"bardzo",de:"sehr",cat:"Podstawowe"},
+  {n:791,en:"victim",pl:"ofiara",de:"Opfer",cat:"Prawo"},
+  {n:792,en:"view",pl:"widok, pogląd",de:"Ansicht, Blick",cat:"Zmysły"},
+  {n:793,en:"violence",pl:"przemoc",de:"Gewalt",cat:"Prawo"},
+  {n:794,en:"voice",pl:"głos",de:"Stimme",cat:"Komunikacja"},
+  // W
+  {n:795,en:"walk",pl:"chodzić, spacer",de:"gehen, spazieren, Spaziergang",cat:"Czasowniki"},
+  {n:796,en:"wall",pl:"ściana, mur",de:"Wand, Mauer",cat:"Dom"},
+  {n:797,en:"want",pl:"chcieć",de:"wollen",cat:"Podstawowe"},
+  {n:798,en:"war",pl:"wojna",de:"Krieg",cat:"Polityka"},
+  {n:799,en:"watch",pl:"oglądać, zegarek",de:"schauen, Uhr",cat:"Zmysły"},
+  {n:800,en:"water",pl:"woda",de:"Wasser",cat:"Natura"},
+  {n:801,en:"way",pl:"droga, sposób",de:"Weg, Art und Weise",cat:"Rzeczowniki"},
+  {n:802,en:"we",pl:"my",de:"wir",cat:"Podstawowe"},
+  {n:803,en:"weapon",pl:"broń",de:"Waffe",cat:"Polityka"},
+  {n:804,en:"week",pl:"tydzień",de:"Woche",cat:"Czas"},
+  {n:805,en:"weight",pl:"waga, ciężar",de:"Gewicht",cat:"Liczby"},
+  {n:806,en:"well",pl:"dobrze, studnia",de:"gut, Brunnen",cat:"Podstawowe"},
+  {n:807,en:"west",pl:"zachód",de:"Westen",cat:"Miejsca"},
+  {n:808,en:"what",pl:"co, jaki",de:"was, welche",cat:"Podstawowe"},
+  {n:809,en:"when",pl:"kiedy",de:"wann, als",cat:"Czas"},
+  {n:810,en:"where",pl:"gdzie",de:"wo",cat:"Miejsca"},
+  {n:811,en:"whether",pl:"czy (warunek)",de:"ob",cat:"Podstawowe"},
+  {n:812,en:"which",pl:"który",de:"welche, der/die/das",cat:"Podstawowe"},
+  {n:813,en:"while",pl:"podczas gdy, chwila",de:"während, Weile",cat:"Czas"},
+  {n:814,en:"white",pl:"biały",de:"weiß",cat:"Kolory"},
+  {n:815,en:"who",pl:"kto",de:"wer",cat:"Podstawowe"},
+  {n:816,en:"whole",pl:"cały, całość",de:"ganz, vollständig",cat:"Cechy"},
+  {n:817,en:"why",pl:"dlaczego",de:"warum",cat:"Podstawowe"},
+  {n:818,en:"wide",pl:"szeroki",de:"breit",cat:"Cechy"},
+  {n:819,en:"will",pl:"będzie, wola",de:"werden, Wille",cat:"Podstawowe"},
+  {n:820,en:"win",pl:"wygrać",de:"gewinnen",cat:"Czasowniki"},
+  {n:821,en:"window",pl:"okno",de:"Fenster",cat:"Dom"},
+  {n:822,en:"wish",pl:"życzenie, życzyć",de:"Wunsch, wünschen",cat:"Emocje"},
+  {n:823,en:"with",pl:"z, razem z",de:"mit",cat:"Podstawowe"},
+  {n:824,en:"woman",pl:"kobieta",de:"Frau",cat:"Ludzie"},
+  {n:825,en:"wonder",pl:"ciekawy jestem, cud",de:"Wunder, sich fragen",cat:"Emocje"},
+  {n:826,en:"word",pl:"słowo",de:"Wort",cat:"Komunikacja"},
+  {n:827,en:"work",pl:"praca, pracować",de:"Arbeit, arbeiten",cat:"Praca"},
+  {n:828,en:"worker",pl:"pracownik, robotnik",de:"Arbeiter, Mitarbeiter",cat:"Praca"},
+  {n:829,en:"world",pl:"świat",de:"Welt",cat:"Miejsca"},
+  {n:830,en:"worry",pl:"martwić się, troska",de:"sich sorgen, Sorge",cat:"Emocje"},
+  {n:831,en:"would",pl:"chciałby, by",de:"würde",cat:"Podstawowe"},
+  {n:832,en:"write",pl:"pisać",de:"schreiben",cat:"Edukacja"},
+  {n:833,en:"wrong",pl:"zły, błędny",de:"falsch, unrichtig",cat:"Cechy"},
+  // Y
+  {n:834,en:"yard",pl:"jard, podwórko",de:"Yard, Hof",cat:"Miejsca"},
+  {n:835,en:"yeah",pl:"tak (potocznie)",de:"ja (umgangssprachlich)",cat:"Podstawowe"},
+  {n:836,en:"year",pl:"rok",de:"Jahr",cat:"Czas"},
+  {n:837,en:"yes",pl:"tak",de:"ja",cat:"Podstawowe"},
+  {n:838,en:"yet",pl:"jeszcze, już, jednak",de:"noch, bereits, jedoch",cat:"Czas"},
+  {n:839,en:"you",pl:"ty, wy, pan/pani",de:"du, Sie, ihr",cat:"Podstawowe"},
+  {n:840,en:"young",pl:"młody",de:"jung",cat:"Cechy"},
+  {n:841,en:"your",pl:"twój, wasz",de:"dein, Ihr",cat:"Podstawowe"},
+  {n:842,en:"yourself",pl:"ty sam, siebie",de:"du selbst, sich",cat:"Podstawowe"},
+  // extra to reach ~1000
+  {n:843,en:"ability",pl:"zdolność",de:"Fähigkeit, Können",cat:"Cechy"},
+  {n:844,en:"achieve",pl:"osiągnąć",de:"erreichen, erzielen",cat:"Czasowniki"},
+  {n:845,en:"across",pl:"na krzyż, w poprzek",de:"quer, über",cat:"Podstawowe"},
+  {n:846,en:"afternoon",pl:"popołudnie",de:"Nachmittag",cat:"Czas"},
+  {n:847,en:"airport",pl:"lotnisko",de:"Flughafen",cat:"Transport"},
+  {n:848,en:"alcohol",pl:"alkohol",de:"Alkohol",cat:"Jedzenie"},
+  {n:849,en:"anger",pl:"gniew, złość",de:"Wut, Ärger",cat:"Emocje"},
+  {n:850,en:"announce",pl:"ogłosić, zapowiadać",de:"ankündigen, bekanntgeben",cat:"Komunikacja"},
+  {n:851,en:"apartment",pl:"mieszkanie",de:"Wohnung, Apartment",cat:"Dom"},
+  {n:852,en:"apple",pl:"jabłko",de:"Apfel",cat:"Jedzenie"},
+  {n:853,en:"average",pl:"średni, przeciętny",de:"Durchschnitt, durchschnittlich",cat:"Liczby"},
+  {n:854,en:"aware",pl:"świadomy",de:"bewusst, sich bewusst sein",cat:"Cechy"},
+  {n:855,en:"beach",pl:"plaża",de:"Strand",cat:"Natura"},
+  {n:856,en:"begin",pl:"zacząć",de:"beginnen, anfangen",cat:"Czasowniki"},
+  {n:857,en:"below",pl:"poniżej, pod",de:"unter, unterhalb",cat:"Podstawowe"},
+  {n:858,en:"bird",pl:"ptak",de:"Vogel",cat:"Natura"},
+  {n:859,en:"bitter",pl:"gorzki, rozgoryczony",de:"bitter, verbittert",cat:"Cechy"},
+  {n:860,en:"block",pl:"blokować, blok",de:"blockieren, Block",cat:"Czasowniki"},
+  {n:861,en:"blow",pl:"dmuchać, uderzenie",de:"blasen, Schlag",cat:"Czasowniki"},
+  {n:862,en:"boat",pl:"łódź, łódka",de:"Boot",cat:"Transport"},
+  {n:863,en:"bomb",pl:"bomba",de:"Bombe",cat:"Polityka"},
+  {n:864,en:"bread",pl:"chleb",de:"Brot",cat:"Jedzenie"},
+  {n:865,en:"bright",pl:"jasny, błyszczący",de:"hell, strahlend",cat:"Cechy"},
+  {n:866,en:"broad",pl:"szeroki",de:"breit",cat:"Cechy"},
+  {n:867,en:"burn",pl:"palić się, parzyć",de:"brennen, verbrennen",cat:"Czasowniki"},
+  {n:868,en:"calculate",pl:"obliczać",de:"berechnen",cat:"Nauka"},
+  {n:869,en:"calm",pl:"spokojny, spokój",de:"ruhig, Ruhe",cat:"Cechy"},
+  {n:870,en:"careful",pl:"ostrożny",de:"vorsichtig, sorgfältig",cat:"Cechy"},
+  {n:871,en:"cause",pl:"przyczyna, powód",de:"Ursache, verursachen",cat:"Rzeczowniki"},
+  {n:872,en:"celebrate",pl:"świętować",de:"feiern",cat:"Kultura"},
+  {n:873,en:"chance",pl:"szansa, okazja",de:"Chance, Gelegenheit",cat:"Rzeczowniki"},
+  {n:874,en:"cheap",pl:"tani",de:"billig, günstig",cat:"Cechy"},
+  {n:875,en:"clean",pl:"czysty, czyścić",de:"sauber, reinigen",cat:"Cechy"},
+  {n:876,en:"climb",pl:"wspinać się",de:"klettern, steigen",cat:"Czasowniki"},
+  {n:877,en:"clothes",pl:"ubrania",de:"Kleidung, Kleider",cat:"Przedmioty"},
+  {n:878,en:"cloud",pl:"chmura",de:"Wolke",cat:"Natura"},
+  {n:879,en:"collect",pl:"zbierać, kolekcjonować",de:"sammeln",cat:"Czasowniki"},
+  {n:880,en:"comfortable",pl:"wygodny",de:"bequem, komfortabel",cat:"Cechy"},
+  {n:881,en:"complete",pl:"kompletny, ukończyć",de:"vollständig, abschließen",cat:"Cechy"},
+  {n:882,en:"complex",pl:"złożony, kompleks",de:"komplex, Komplex",cat:"Cechy"},
+  {n:883,en:"conflict",pl:"konflikt",de:"Konflikt, Streit",cat:"Polityka"},
+  {n:884,en:"connect",pl:"łączyć, podłączyć",de:"verbinden, anschließen",cat:"Czasowniki"},
+  {n:885,en:"contact",pl:"kontakt, kontaktować się",de:"Kontakt, kontaktieren",cat:"Komunikacja"},
+  {n:886,en:"continue",pl:"kontynuować",de:"fortfahren, weitermachen",cat:"Czasowniki"},
+  {n:887,en:"cook",pl:"gotować, kucharz",de:"kochen, Koch",cat:"Jedzenie"},
+  {n:888,en:"copy",pl:"kopia, kopiować",de:"Kopie, kopieren",cat:"Czasowniki"},
+  {n:889,en:"correct",pl:"poprawny, poprawiać",de:"richtig, korrigieren",cat:"Cechy"},
+  {n:890,en:"credit",pl:"kredyt, uznanie",de:"Kredit, Anerkennung",cat:"Finanse"},
+  {n:891,en:"crowd",pl:"tłum",de:"Menschenmenge",cat:"Ludzie"},
+  {n:892,en:"curious",pl:"ciekawy, dociekliwy",de:"neugierig",cat:"Cechy"},
+  {n:893,en:"cycle",pl:"cykl, rower",de:"Zyklus, Fahrrad",cat:"Transport"},
+  {n:894,en:"danger",pl:"niebezpieczeństwo",de:"Gefahr",cat:"Rzeczowniki"},
+  {n:895,en:"democracy",pl:"demokracja",de:"Demokratie",cat:"Polityka"},
+  {n:896,en:"desert",pl:"pustynia, deser",de:"Wüste, Dessert",cat:"Natura"},
+  {n:897,en:"digital",pl:"cyfrowy",de:"digital",cat:"Technologia"},
+  {n:898,en:"dirty",pl:"brudny",de:"schmutzig",cat:"Cechy"},
+  {n:899,en:"doubt",pl:"wątpić, wątpliwość",de:"Zweifel, zweifeln",cat:"Emocje"},
+  {n:900,en:"drink",pl:"pić, napój",de:"trinken, Getränk",cat:"Jedzenie"},
+  {n:901,en:"earth",pl:"ziemia, Ziemia",de:"Erde",cat:"Natura"},
+  {n:902,en:"edge",pl:"krawędź, brzeg",de:"Rand, Kante",cat:"Rzeczowniki"},
+  {n:903,en:"emotion",pl:"emocja, uczucie",de:"Emotion, Gefühl",cat:"Emocje"},
+  {n:904,en:"empty",pl:"pusty",de:"leer",cat:"Cechy"},
+  {n:905,en:"engine",pl:"silnik, motor",de:"Motor, Triebwerk",cat:"Transport"},
+  {n:906,en:"English",pl:"angielski, Anglik",de:"Englisch, Engländer",cat:"Kultura"},
+  {n:907,en:"equal",pl:"równy, równać",de:"gleich, gleichwertig",cat:"Cechy"},
+  {n:908,en:"essay",pl:"esej, wypracowanie",de:"Aufsatz, Essay",cat:"Edukacja"},
+  {n:909,en:"except",pl:"z wyjątkiem",de:"außer, mit Ausnahme",cat:"Podstawowe"},
+  {n:910,en:"exercise",pl:"ćwiczenie, ćwiczyć",de:"Übung, Sport treiben",cat:"Zdrowie"},
+  {n:911,en:"expert",pl:"ekspert, specjalista",de:"Experte, Fachmann",cat:"Praca"},
+  {n:912,en:"extra",pl:"dodatkowy",de:"zusätzlich, extra",cat:"Cechy"},
+  {n:913,en:"extreme",pl:"skrajny, ekstremalny",de:"extrem",cat:"Cechy"},
+  {n:914,en:"fair",pl:"sprawiedliwy, targi",de:"fair, gerecht, Messe",cat:"Cechy"},
+  {n:915,en:"false",pl:"fałszywy",de:"falsch, unrichtig",cat:"Cechy"},
+  {n:916,en:"famous",pl:"sławny, znany",de:"berühmt",cat:"Cechy"},
+  {n:917,en:"female",pl:"kobieta, żeński",de:"weiblich, Frau",cat:"Ludzie"},
+  {n:918,en:"flat",pl:"płaski, mieszkanie",de:"flach, Wohnung",cat:"Cechy"},
+  {n:919,en:"flower",pl:"kwiat",de:"Blume",cat:"Natura"},
+  {n:920,en:"forest",pl:"las",de:"Wald",cat:"Natura"},
+  {n:921,en:"fresh",pl:"świeży",de:"frisch",cat:"Cechy"},
+  {n:922,en:"frozen",pl:"zamrożony",de:"gefroren, eingefroren",cat:"Cechy"},
+  {n:923,en:"fun",pl:"zabawa, przyjemność",de:"Spaß, Vergnügen",cat:"Emocje"},
+  {n:924,en:"gender",pl:"płeć",de:"Geschlecht",cat:"Ludzie"},
+  {n:925,en:"gentle",pl:"łagodny, delikatny",de:"sanft, freundlich",cat:"Cechy"},
+  {n:926,en:"gift",pl:"prezent, talent",de:"Geschenk, Talent",cat:"Rzeczowniki"},
+  {n:927,en:"glad",pl:"zadowolony",de:"froh, erfreut",cat:"Emocje"},
+  {n:928,en:"global",pl:"globalny, światowy",de:"global, weltumfassend",cat:"Cechy"},
+  {n:929,en:"gold",pl:"złoto, złoty",de:"Gold, golden",cat:"Kolory"},
+  {n:930,en:"grade",pl:"ocena, klasa",de:"Note, Klasse",cat:"Edukacja"},
+  {n:931,en:"guess",pl:"zgadywać, domysł",de:"raten, Vermutung",cat:"Komunikacja"},
+  {n:932,en:"guide",pl:"przewodnik, prowadzić",de:"Führer, führen",cat:"Praca"},
+  {n:933,en:"habit",pl:"nawyk, przyzwyczajenie",de:"Gewohnheit",cat:"Cechy"},
+  {n:934,en:"happen",pl:"zdarzyć się",de:"passieren, geschehen",cat:"Czasowniki"},
+  {n:935,en:"hate",pl:"nienawidzieć, nienawiść",de:"hassen, Hass",cat:"Emocje"},
+  {n:936,en:"heavy",pl:"ciężki, intensywny",de:"schwer",cat:"Cechy"},
+  {n:937,en:"hero",pl:"bohater",de:"Held",cat:"Kultura"},
+  {n:938,en:"hide",pl:"ukrywać, skóra",de:"verstecken, Haut",cat:"Czasowniki"},
+  {n:939,en:"honest",pl:"uczciwy",de:"ehrlich",cat:"Cechy"},
+  {n:940,en:"humor",pl:"humor, poczucie humoru",de:"Humor",cat:"Emocje"},
+  {n:941,en:"hurt",pl:"boleć, ranić",de:"verletzen, schmerzen",cat:"Zdrowie"},
+  {n:942,en:"ill",pl:"chory",de:"krank",cat:"Zdrowie"},
+  {n:943,en:"income",pl:"dochód, przychód",de:"Einkommen",cat:"Finanse"},
+  {n:944,en:"internet",pl:"internet",de:"Internet",cat:"Technologia"},
+  {n:945,en:"island",pl:"wyspa",de:"Insel",cat:"Natura"},
+  {n:946,en:"jump",pl:"skakać, skok",de:"springen, Sprung",cat:"Czasowniki"},
+  {n:947,en:"key",pl:"klucz, kluczowy",de:"Schlüssel, wichtigste",cat:"Przedmioty"},
+  {n:948,en:"laugh",pl:"śmiać się",de:"lachen, Lachen",cat:"Emocje"},
+  {n:949,en:"lesson",pl:"lekcja",de:"Lektion, Unterrichtsstunde",cat:"Edukacja"},
+  {n:950,en:"limit",pl:"limit, ograniczać",de:"Grenze, begrenzen",cat:"Rzeczowniki"},
+  {n:951,en:"lucky",pl:"szczęśliwy, mający szczęście",de:"glücklich, Glücks-",cat:"Cechy"},
+  {n:952,en:"male",pl:"mężczyzna, męski",de:"männlich, Mann",cat:"Ludzie"},
+  {n:953,en:"meal",pl:"posiłek",de:"Mahlzeit, Essen",cat:"Jedzenie"},
+  {n:954,en:"medicine",pl:"lekárstwo, medycyna",de:"Medizin, Medikament",cat:"Zdrowie"},
+  {n:955,en:"mention",pl:"wspomnieć, wzmianka",de:"erwähnen",cat:"Komunikacja"},
+  {n:956,en:"metal",pl:"metal",de:"Metall",cat:"Przedmioty"},
+  {n:957,en:"mistake",pl:"błąd, pomyłka",de:"Fehler, Irrtum",cat:"Rzeczowniki"},
+  {n:958,en:"mix",pl:"mieszać, mieszanina",de:"mischen, Mischung",cat:"Czasowniki"},
+  {n:959,en:"moon",pl:"księżyc",de:"Mond",cat:"Natura"},
+  {n:960,en:"mountain",pl:"góra",de:"Berg",cat:"Natura"},
+  {n:961,en:"mouth",pl:"usta",de:"Mund",cat:"Ciało"},
+  {n:962,en:"movie",pl:"film",de:"Film",cat:"Kultura"},
+  {n:963,en:"neighbor",pl:"sąsiad",de:"Nachbar",cat:"Ludzie"},
+  {n:964,en:"nose",pl:"nos",de:"Nase",cat:"Ciało"},
+  {n:965,en:"note",pl:"notatka, nutka",de:"Notiz, Note",cat:"Komunikacja"},
+  {n:966,en:"nurse",pl:"pielęgniarka, pielęgniarz",de:"Krankenschwester, Krankenpfleger",cat:"Zdrowie"},
+  {n:967,en:"ocean",pl:"ocean",de:"Ozean, Meer",cat:"Natura"},
+  {n:968,en:"pain",pl:"ból, cierpienie",de:"Schmerz",cat:"Zdrowie"},
+  {n:969,en:"paint",pl:"malować, farba",de:"malen, Farbe",cat:"Kultura"},
+  {n:970,en:"path",pl:"ścieżka, droga",de:"Pfad, Weg",cat:"Miejsca"},
+  {n:971,en:"patient",pl:"pacjent, cierpliwy",de:"Patient, geduldig",cat:"Zdrowie"},
+  {n:972,en:"planet",pl:"planeta",de:"Planet",cat:"Nauka"},
+  {n:973,en:"plant",pl:"roślina, sadzić",de:"Pflanze, pflanzen",cat:"Natura"},
+  {n:974,en:"plastic",pl:"plastik",de:"Plastik",cat:"Przedmioty"},
+  {n:975,en:"police",pl:"policja",de:"Polizei",cat:"Prawo"},
+  {n:976,en:"pool",pl:"basen, pula",de:"Pool, Schwimmbad",cat:"Miejsca"},
+  {n:977,en:"positive",pl:"pozytywny",de:"positiv",cat:"Cechy"},
+  {n:978,en:"pretty",pl:"ładny, dość",de:"hübsch, ziemlich",cat:"Cechy"},
+  {n:979,en:"prison",pl:"więzienie",de:"Gefängnis",cat:"Prawo"},
+  {n:980,en:"proud",pl:"dumny",de:"stolz",cat:"Emocje"},
+  {n:981,en:"quick",pl:"szybki",de:"schnell",cat:"Cechy"},
+  {n:982,en:"quiet",pl:"cichy, spokojny",de:"ruhig, leise",cat:"Cechy"},
+  {n:983,en:"rain",pl:"deszcz, padać",de:"Regen, regnen",cat:"Natura"},
+  {n:984,en:"red",pl:"czerwony",de:"rot",cat:"Kolory"},
+  {n:985,en:"refuse",pl:"odmówić",de:"verweigern, ablehnen",cat:"Komunikacja"},
+  {n:986,en:"religion",pl:"religia",de:"Religion",cat:"Kultura"},
+  {n:987,en:"river",pl:"rzeka",de:"Fluss",cat:"Natura"},
+  {n:988,en:"rock",pl:"skała, rock (muzyka)",de:"Felsen, Rock (Musik)",cat:"Natura"},
+  {n:989,en:"safe",pl:"bezpieczny, sejf",de:"sicher, Safe",cat:"Cechy"},
+  {n:990,en:"salt",pl:"sól",de:"Salz",cat:"Jedzenie"},
+  {n:991,en:"sand",pl:"piasek",de:"Sand",cat:"Natura"},
+  {n:992,en:"secret",pl:"tajemnica, tajny",de:"Geheimnis, geheim",cat:"Rzeczowniki"},
+  {n:993,en:"sky",pl:"niebo",de:"Himmel",cat:"Natura"},
+  {n:994,en:"sleep",pl:"spać, sen",de:"schlafen, Schlaf",cat:"Zdrowie"},
+  {n:995,en:"slow",pl:"powolny, wolno",de:"langsam",cat:"Cechy"},
+  {n:996,en:"smile",pl:"uśmiechać się, uśmiech",de:"lächeln, Lächeln",cat:"Emocje"},
+  {n:997,en:"snow",pl:"śnieg, padać (śnieg)",de:"Schnee, schneien",cat:"Natura"},
+  {n:998,en:"star",pl:"gwiazda, gwiazdor",de:"Stern, Star",cat:"Nauka"},
+  {n:999,en:"sugar",pl:"cukier",de:"Zucker",cat:"Jedzenie"},
+  {n:1000,en:"sun",pl:"słońce",de:"Sonne",cat:"Natura"},
+];
+
+
+// ═══════════ STATE ═══════════
+const S = (() => {
+  const defaults = {
+    known:{}, unknown:{}, completedLessons:{}, xp:0,
+    streak:0, lastDate:'', sentCount:0, quizCount:0
+  };
+  try { return {...defaults,...JSON.parse(localStorage.getItem('eng_app_state')||'{}')}; }
+  catch(e){ return {...defaults}; }
+})();
+function save() { try{ localStorage.setItem('eng_app_state', JSON.stringify(S)); }catch(e){} }
+
+// ═══════════ SPEECH ═══════════
+function speak(text, lang='en-US', rate=0.9) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang=lang; u.rate=rate;
+  const voices = window.speechSynthesis.getVoices();
+  const v = voices.find(v=>v.lang.startsWith(lang.split('-')[0])&&v.localService);
+  if(v) u.voice=v;
+  window.speechSynthesis.speak(u);
+}
+window.speechSynthesis&&window.speechSynthesis.getVoices();
+
+// ═══════════ TABS ═══════════
+function switchTab(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.bnav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  const names=['home','grammar','vocab','quiz','sentences'];
+  document.querySelectorAll('.bnav-tab')[names.indexOf(name)]?.classList.add('active');
+  if(name==='home') renderHome();
+  if(name==='vocab') { buildCatBar(); renderGrid(); }
+}
+
+// ═══════════ GRAMMAR DATA ═══════════
+const GRAMMAR = [
+  {
+    id:'tenses', icon:'⏰', name:'Czasy angielskie',
+    lessons:[
+      {
+        id:'present-simple', title:'Present Simple', xp:20,
+        theory:`<h3>Present Simple – Czas teraźniejszy prosty</h3>
+<p>Używamy Present Simple do opisywania <span class="highlight">stałych faktów, nawyków, regularnych czynności</span> oraz prawd ogólnych.</p>
+<div class="formula">Zdanie twierdzące: I/You/We/They + V<br>He/She/It + V+s/es</div>
+<div class="example-box"><div class="en">I work every day.</div><div class="pl">Pracuję każdego dnia.</div><div class="de">🇩🇪 Ich arbeite jeden Tag.</div></div>
+<div class="example-box"><div class="en">She speaks English.</div><div class="pl">Ona mówi po angielsku.</div><div class="de">🇩🇪 Sie spricht Englisch.</div></div>
+<div class="formula">Zdanie przeczące: do/does + not + V (don't/doesn't)</div>
+<div class="example-box"><div class="en">He doesn't eat meat.</div><div class="pl">On nie je mięsa.</div><div class="de">🇩🇪 Er isst kein Fleisch.</div></div>
+<div class="formula">Pytanie: Do/Does + podmiot + V?</div>
+<div class="example-box"><div class="en">Do you like coffee?</div><div class="pl">Czy lubisz kawę?</div></div>
+<p><span class="highlight">Pamiętaj!</span> Dla he/she/it dodajemy -s lub -es: go→goes, watch→watches, study→studies</p>`,
+        exercises:[
+          {type:'mcq',q:'She ___ to school every day.',opts:['go','goes','is going','went'],ans:1,exp:'Dla he/she/it dodajemy -s: goes'},
+          {type:'mcq',q:'They ___ not speak French.',opts:['do','does','is','are'],ans:0,exp:'Z they używamy do (not does)'},
+          {type:'fill',q:'Complete: I ___ (like) pizza.',ans:'like',exp:'Z I w Present Simple forma podstawowa'},
+          {type:'mcq',q:'___ he work in a bank?',opts:['Do','Does','Is','Has'],ans:1,exp:'Z he/she/it w pytaniu: Does'},
+          {type:'fill',q:'She ___ (watch) TV every evening.',ans:'watches',exp:'watch + es = watches (końcówka -ch)'},
+        ]
+      },
+      {
+        id:'present-cont', title:'Present Continuous', xp:20,
+        theory:`<h3>Present Continuous – Czas teraźniejszy ciągły</h3>
+<p>Używamy Present Continuous dla <span class="highlight">czynności odbywających się w tej chwili</span> lub tymczasowo.</p>
+<div class="formula">Zdanie twierdzące: be (am/is/are) + V+ing</div>
+<div class="example-box"><div class="en">I am reading a book right now.</div><div class="pl">Właśnie teraz czytam książkę.</div><div class="de">🇩🇪 Ich lese gerade ein Buch.</div></div>
+<div class="example-box"><div class="en">She is working from home this week.</div><div class="pl">W tym tygodniu pracuje z domu.</div><div class="de">🇩🇪 Diese Woche arbeitet sie von zu Hause.</div></div>
+<div class="formula">Przeczenie: am/is/are + not + V+ing</div>
+<div class="example-box"><div class="en">They aren't watching TV.</div><div class="pl">Oni nie oglądają telewizji.</div><div class="de">🇩🇪 Sie sehen nicht fern.</div></div>
+<div class="formula">Pytanie: Am/Is/Are + podmiot + V+ing?</div>
+<p><span class="highlight">Sygnały czasowe:</span> now, right now, at the moment, currently, today, this week</p>
+<p><span class="highlight">Pisownia -ing:</span> come→coming, run→running, lie→lying</p>`,
+        exercises:[
+          {type:'mcq',q:'She ___ a letter right now.',opts:['write','writes','is writing','wrote'],ans:2,exp:'Teraz = Present Continuous: is writing'},
+          {type:'fill',q:'They ___ (play) football at the moment.',ans:'are playing',exp:'They + are + play+ing'},
+          {type:'mcq',q:'___ you listening to me?',opts:['Do','Does','Are','Is'],ans:2,exp:'Z you w PC: Are'},
+          {type:'mcq',q:'"Look! It ___ snow!"',opts:['snows','is snowing','snowed','snow'],ans:1,exp:'Teraz, w tej chwili = is snowing'},
+          {type:'fill',q:'He ___ (not/work) today.',ans:"isn't working",exp:'is not working → isn\'t working'},
+        ]
+      },
+      {
+        id:'past-simple', title:'Past Simple', xp:25,
+        theory:`<h3>Past Simple – Czas przeszły prosty</h3>
+<p>Używamy Past Simple dla <span class="highlight">zakończonych czynności w przeszłości</span>, często z podanym czasem.</p>
+<div class="formula">Twierdzenie: podmiot + V2 (forma 2. lub V+ed)</div>
+<div class="example-box"><div class="en">I worked yesterday.</div><div class="pl">Pracowałem wczoraj.</div><div class="de">🇩🇪 Ich arbeitete gestern.</div></div>
+<div class="example-box"><div class="en">She went to Paris last year.</div><div class="pl">Pojechała do Paryża w zeszłym roku.</div><div class="de">🇩🇪 Sie fuhr letztes Jahr nach Paris.</div></div>
+<div class="formula">Przeczenie: didn't + V (forma podstawowa!)</div>
+<div class="example-box"><div class="en">He didn't call me.</div><div class="pl">On nie zadzwonił do mnie.</div><div class="de">🇩🇪 Er hat mich nicht angerufen.</div></div>
+<div class="formula">Pytanie: Did + podmiot + V?</div>
+<p><span class="highlight">Nieregularne:</span> go→went, have→had, see→saw, come→came, take→took, make→made, get→got</p>
+<p><span class="highlight">Sygnały:</span> yesterday, last week/year, ago, in 2010, then</p>`,
+        exercises:[
+          {type:'mcq',q:'I ___ TV last night.',opts:['watch','watches','watched','was watching'],ans:2,exp:'Past Simple z yesterday/last: watched'},
+          {type:'fill',q:'She ___ (go) to the market yesterday.',ans:'went',exp:'go jest nieregularny → went'},
+          {type:'mcq',q:'They ___ not come to the party.',opts:['did','do','does','were'],ans:0,exp:'Przeczenie w Past Simple: did not (didn\'t)'},
+          {type:'fill',q:'___ you see that film?',ans:'Did',exp:'Pytanie w Past Simple: Did + podmiot + V?'},
+          {type:'mcq',q:'He ___ a new car last month.',opts:['buy','buys','bought','has bought'],ans:2,exp:'buy → bought (nieregularny)'},
+        ]
+      },
+      {
+        id:'past-cont', title:'Past Continuous', xp:25,
+        theory:`<h3>Past Continuous – Czas przeszły ciągły</h3>
+<p>Używamy Past Continuous dla <span class="highlight">czynności trwającej w pewnym momencie w przeszłości</span> lub przerwanej przez inną czynność.</p>
+<div class="formula">was/were + V+ing</div>
+<div class="example-box"><div class="en">I was sleeping when you called.</div><div class="pl">Spałem, kiedy zadzwoniłeś.</div><div class="de">🇩🇪 Ich schlief, als du anriefst.</div></div>
+<div class="example-box"><div class="en">They were playing football at 5 pm.</div><div class="pl">O 17:00 grali w piłkę.</div><div class="de">🇩🇪 Um 17 Uhr spielten sie Fußball.</div></div>
+<p><span class="highlight">Schemat:</span> Past Continuous (trwało) + when + Past Simple (przerwało)</p>
+<div class="example-box"><div class="en">She was reading <b>when</b> the phone rang.</div><div class="pl">Czytała, kiedy zadzwonił telefon.</div><div class="de">🇩🇪 Sie las, als das Telefon klingelte.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'At 8 pm yesterday I ___ dinner.',opts:['cook','cooked','was cooking','am cooking'],ans:2,exp:'Konkretny moment w przeszłości = Past Cont.'},
+          {type:'fill',q:'They ___ (sleep) when I arrived.',ans:'were sleeping',exp:'they + were + sleep+ing'},
+          {type:'mcq',q:'She ___ when the accident happened.',opts:['drove','was driving','drives','had driven'],ans:1,exp:'Czynność trwała (was driving) gdy zaszła inna'},
+          {type:'mcq',q:'___ he working at 10 am?',opts:['Did','Was','Were','Is'],ans:1,exp:'Z he w Past Cont.: Was'},
+          {type:'fill',q:'I ___ (not/listen) to music then.',ans:"wasn't listening",exp:'was not listening → wasn\'t listening'},
+        ]
+      },
+      {
+        id:'present-perfect', title:'Present Perfect', xp:30,
+        theory:`<h3>Present Perfect</h3>
+<p>Używamy Present Perfect dla <span class="highlight">doświadczeń życiowych, wyników w teraźniejszości, czynności niedawno zakończonych</span>.</p>
+<div class="formula">have/has + V3 (imiesłów bierny)</div>
+<div class="example-box"><div class="en">I have been to France twice.</div><div class="pl">Byłem we Francji dwa razy.</div><div class="de">🇩🇪 Ich war zweimal in Frankreich.</div></div>
+<div class="example-box"><div class="en">She has just finished her homework.</div><div class="pl">Właśnie skończyła pracę domową.</div><div class="de">🇩🇪 Sie hat gerade ihre Hausaufgaben beendet.</div></div>
+<p><span class="highlight">Sygnały:</span> ever, never, already, just, yet, since, for, recently</p>
+<p><span class="highlight">Nieregularne V3:</span> go→gone, have→had, see→seen, come→come, take→taken, make→made, eat→eaten</p>`,
+        exercises:[
+          {type:'mcq',q:'I ___ never been to Japan.',opts:['have','has','had','did'],ans:0,exp:'Z I: have (never = sygnał PP)'},
+          {type:'fill',q:'She ___ (already/finish) the report.',ans:'has already finished',exp:'has + already + V3 (finished)'},
+          {type:'mcq',q:'Have you ___ sushi?',opts:['eat','ate','eaten','eating'],ans:2,exp:'Present Perfect wymaga V3: eaten'},
+          {type:'mcq',q:'They ___ just arrived.',opts:['have','has','did','are'],ans:0,exp:'just = sygnał Present Perfect, they + have'},
+          {type:'fill',q:'He ___ (live) here since 2010.',ans:'has lived',exp:'since = od konkretnego czasu → Present Perfect'},
+        ]
+      },
+      {
+        id:'future-will', title:'Future – will', xp:20,
+        theory:`<h3>Future Simple – will</h3>
+<p>Używamy <span class="highlight">will</span> dla: spontanicznych decyzji, przepowiedni, obietnic, próśb/ofert.</p>
+<div class="formula">will + V (forma podstawowa) – dla wszystkich osób</div>
+<div class="example-box"><div class="en">I will call you tomorrow. (obietnica)</div><div class="pl">Zadzwonię do ciebie jutro.</div><div class="de">🇩🇪 Ich werde dich morgen anrufen.</div></div>
+<div class="example-box"><div class="en">It will rain later. (przepowiednia)</div><div class="pl">Później będzie padać.</div><div class="de">🇩🇪 Es wird später regnen.</div></div>
+<div class="formula">Skrót: I'll, you'll, he'll, she'll, we'll, they'll<br>Przeczenie: won't (will not)</div>
+<div class="example-box"><div class="en">I won't tell anyone.</div><div class="pl">Nikomu nie powiem.</div><div class="de">🇩🇪 Ich werde es niemandem sagen.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'"The phone is ringing." "I ___ answer it."',opts:['am going to','will','would','shall'],ans:1,exp:'Spontaniczna decyzja = will'},
+          {type:'fill',q:'She ___ (not/come) to the party.',ans:"won't come",exp:'will not = won\'t + forma podstawowa'},
+          {type:'mcq',q:'___ you help me with this?',opts:['Do','Are','Will','Have'],ans:2,exp:'Prośba z will: Will you...?'},
+          {type:'fill',q:'I think it ___ (be) sunny tomorrow.',ans:'will be',exp:'Przepowiednia = will be'},
+          {type:'mcq',q:'Don\'t worry, I ___ forget.',opts:["won't","don't","haven't","didn't"],ans:0,exp:'Obietnica negatywna = won\'t forget'},
+        ]
+      },
+      {
+        id:'future-going', title:'Future – going to', xp:20,
+        theory:`<h3>Future – going to</h3>
+<p>Używamy <span class="highlight">going to</span> dla: zaplanowanych działań, przewidywań opartych na dowodach.</p>
+<div class="formula">am/is/are + going to + V</div>
+<div class="example-box"><div class="en">I'm going to visit my parents this weekend. (plan)</div><div class="pl">Zamierzam odwiedzić rodziców w ten weekend.</div><div class="de">🇩🇪 Ich werde dieses Wochenende meine Eltern besuchen.</div></div>
+<div class="example-box"><div class="en">Look at those clouds – it's going to rain. (dowód)</div><div class="pl">Patrz na te chmury – będzie padać.</div><div class="de">🇩🇪 Schau dir die Wolken an – es wird regnen.</div></div>
+<p><span class="highlight">Will vs Going to:</span><br>• Spontaniczne = will &nbsp;|&nbsp; Zaplanowane = going to<br>• Przewidywania bez dowodów = will &nbsp;|&nbsp; Z dowodami = going to</p>`,
+        exercises:[
+          {type:'mcq',q:'I ___ study medicine. I\'ve already applied.',opts:["'m going to","'ll","'ve been","was going"],ans:0,exp:'Zaplanowana decyzja = going to'},
+          {type:'fill',q:'She ___ (not/go) to the concert.',ans:"isn't going to go",exp:'is not going to go → isn\'t going to go'},
+          {type:'mcq',q:'Look! He ___ fall!',opts:["'s going to","'ll","would","might"],ans:0,exp:'Dowód widoczny (patrz!) = going to'},
+          {type:'fill',q:'___ they going to move to London?',ans:'Are',exp:'Pytanie z going to: Are/Is/Am + podmiot + going to?'},
+          {type:'mcq',q:'We ___ get married next June.',opts:["'re going to","will","would","are"],ans:0,exp:'Konkretny plan = are going to'},
+        ]
+      },
+    ]
+  },
+  {
+    id:'pronouns', icon:'👤', name:'Osoby i zaimki',
+    lessons:[
+      {
+        id:'personal-pron', title:'Zaimki osobowe', xp:15,
+        theory:`<h3>Zaimki osobowe – Personal Pronouns</h3>
+<table>
+<tr><th>Osoba</th><th>Podmiot</th><th>Dopełnienie</th></tr>
+<tr><td>1. os. l.poj.</td><td>I</td><td>me</td></tr>
+<tr><td>2. os. l.poj.</td><td>you</td><td>you</td></tr>
+<tr><td>3. os. l.poj. m.</td><td>he</td><td>him</td></tr>
+<tr><td>3. os. l.poj. ż.</td><td>she</td><td>her</td></tr>
+<tr><td>3. os. l.poj. n.</td><td>it</td><td>it</td></tr>
+<tr><td>1. os. l.mn.</td><td>we</td><td>us</td></tr>
+<tr><td>2. os. l.mn.</td><td>you</td><td>you</td></tr>
+<tr><td>3. os. l.mn.</td><td>they</td><td>them</td></tr>
+</table>
+<div class="example-box"><div class="en">She loves him.</div><div class="pl">Ona kocha jego.</div><div class="de">🇩🇪 Sie liebt ihn.</div></div>
+<div class="example-box"><div class="en">They called us.</div><div class="pl">Oni zadzwonili do nas.</div><div class="de">🇩🇪 Sie haben uns angerufen.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'___ is my friend. (Tom)',opts:['He','Him','His','They'],ans:0,exp:'Tom to mężczyzna, podmiot → He'},
+          {type:'mcq',q:'I saw ___ yesterday. (Anna)',opts:['she','her','hers','they'],ans:1,exp:'Po czasowniku (dopełnienie) = her'},
+          {type:'fill',q:'Give ___ the book. (to us)',ans:'us',exp:'Po give → dopełnienie → us'},
+          {type:'mcq',q:'___ are coming tonight. (my friends)',opts:['They','Them','Their','He'],ans:0,exp:'Przyjaciele = they (podmiot)'},
+          {type:'fill',q:'Can you help ___? (me)',ans:'me',exp:'Po help → dopełnienie → me'},
+        ]
+      },
+      {
+        id:'possessive-pron', title:'Zaimki dzierżawcze', xp:15,
+        theory:`<h3>Zaimki dzierżawcze – Possessive Pronouns</h3>
+<table>
+<tr><th>Podmiot</th><th>Przymiotnikowy</th><th>Samodzielny</th></tr>
+<tr><td>I</td><td>my</td><td>mine</td></tr>
+<tr><td>you</td><td>your</td><td>yours</td></tr>
+<tr><td>he</td><td>his</td><td>his</td></tr>
+<tr><td>she</td><td>her</td><td>hers</td></tr>
+<tr><td>we</td><td>our</td><td>ours</td></tr>
+<tr><td>they</td><td>their</td><td>theirs</td></tr>
+</table>
+<div class="example-box"><div class="en">This is my book. → This book is mine.</div><div class="pl">To jest moja książka. → Ta książka jest moja.</div><div class="de">🇩🇪 Das ist mein Buch. → Dieses Buch gehört mir.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'Is this ___ car? (belonging to you)',opts:['your','yours','you','her'],ans:0,exp:'Przed rzeczownikiem = your (przymiotnikowy)'},
+          {type:'mcq',q:'"Whose jacket is this?" "It\'s ___." (mine/hers)',opts:['my','mine','me','I'],ans:1,exp:'Bez rzeczownika po "It\'s" = mine (samodzielny)'},
+          {type:'fill',q:'They lost ___ keys.',ans:'their',exp:'Przed rzeczownikiem = their (przymiotnikowy)'},
+          {type:'mcq',q:'This house is ___. (theirs)',opts:['their','theirs','them','they'],ans:1,exp:'Samodzielny: theirs'},
+          {type:'fill',q:'I forgot ___ phone at home.',ans:'my',exp:'Przed rzeczownikiem = my'},
+        ]
+      },
+      {
+        id:'reflexive-pron', title:'Zaimki zwrotne', xp:15,
+        theory:`<h3>Zaimki zwrotne – Reflexive Pronouns</h3>
+<table>
+<tr><th>Podmiot</th><th>Zwrotny</th></tr>
+<tr><td>I</td><td>myself</td></tr>
+<tr><td>you</td><td>yourself / yourselves</td></tr>
+<tr><td>he</td><td>himself</td></tr>
+<tr><td>she</td><td>herself</td></tr>
+<tr><td>it</td><td>itself</td></tr>
+<tr><td>we</td><td>ourselves</td></tr>
+<tr><td>they</td><td>themselves</td></tr>
+</table>
+<div class="example-box"><div class="en">She hurt herself.</div><div class="pl">Ona skrzywdziła siebie / się.</div><div class="de">🇩🇪 Sie hat sich verletzt.</div></div>
+<div class="example-box"><div class="en">He did it himself. (= sam)</div><div class="pl">On zrobił to sam.</div><div class="de">🇩🇪 Er hat es selbst gemacht.</div></div>`,
+        exercises:[
+          {type:'fill',q:'I made this cake ___.',ans:'myself',exp:'I → myself'},
+          {type:'mcq',q:'She looked at ___ in the mirror.',opts:['her','herself','hers','she'],ans:1,exp:'Podmiot = she, więc zwrotny = herself'},
+          {type:'fill',q:'They enjoyed ___.',ans:'themselves',exp:'they → themselves'},
+          {type:'mcq',q:'Be careful! Don\'t hurt ___.',opts:['you','your','yourself','yours'],ans:2,exp:'Po hurt (czynność na siebie) = yourself'},
+          {type:'fill',q:'We did all the work ___.',ans:'ourselves',exp:'we → ourselves'},
+        ]
+      },
+      {
+        id:'question-words', title:'Słowa pytające (Wh-)', xp:15,
+        theory:`<h3>Słowa pytające – Question Words</h3>
+<table>
+<tr><th>Słowo</th><th>Pytanie o</th><th>Przykład</th></tr>
+<tr><td><b>Who</b></td><td>osobę</td><td>Who called you?</td></tr>
+<tr><td><b>What</b></td><td>rzecz/czynność</td><td>What are you doing?</td></tr>
+<tr><td><b>Where</b></td><td>miejsce</td><td>Where do you live?</td></tr>
+<tr><td><b>When</b></td><td>czas</td><td>When did you arrive?</td></tr>
+<tr><td><b>Why</b></td><td>przyczynę</td><td>Why are you late?</td></tr>
+<tr><td><b>How</b></td><td>sposób/stan</td><td>How are you?</td></tr>
+<tr><td><b>Which</b></td><td>wybór</td><td>Which do you prefer?</td></tr>
+<tr><td><b>Whose</b></td><td>właściciela</td><td>Whose bag is this?</td></tr>
+</table>
+<div class="example-box"><div class="en">How many / How much / How long / How often</div><div class="pl">Ile (policzalne) / Ile (niepoliczalne) / Jak długo / Jak często</div></div>`,
+        exercises:[
+          {type:'mcq',q:'___ is your name?',opts:['Who','What','Where','When'],ans:1,exp:'Pytanie o rzecz/imię = What'},
+          {type:'fill',q:'___ do you live?',ans:'Where',exp:'Pytanie o miejsce = Where'},
+          {type:'mcq',q:'___ are you crying?',opts:['What','Who','Why','Which'],ans:2,exp:'Pytanie o przyczynę = Why'},
+          {type:'fill',q:'___ bag is this? It\'s mine.',ans:'Whose',exp:'Pytanie o właściciela = Whose'},
+          {type:'mcq',q:'___ often do you go to the gym?',opts:['What','How','When','Where'],ans:1,exp:'How often = jak często'},
+        ]
+      },
+    ]
+  },
+  {
+    id:'articles', icon:'📝', name:'Przedimki',
+    lessons:[
+      {
+        id:'art-indef', title:'Przedimek a / an', xp:15,
+        theory:`<h3>Przedimek nieokreślony – a / an</h3>
+<p>Używamy <span class="highlight">a / an</span> kiedy mówimy o czymś po raz pierwszy lub gdy coś jest nieokreślone.</p>
+<div class="formula">a + spółgłoska &nbsp;|&nbsp; an + samogłoska (a, e, i, o, u)</div>
+<div class="example-box"><div class="en">a book, a car, a university (u czytamy jak "ju")</div></div>
+<div class="example-box"><div class="en">an apple, an egg, an hour (h jest nieme!)</div></div>
+<p>Używamy a/an z <span class="highlight">liczbą pojedynczą rzeczowników policzalnych</span>:</p>
+<div class="example-box"><div class="en">She is a doctor. / I saw a cat.</div><div class="pl">Ona jest lekarką. / Widziałem kota.</div><div class="de">🇩🇪 Sie ist Ärztin. / Ich sah eine Katze.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'She is ___ engineer.',opts:['a','an','the','–'],ans:1,exp:'engineer zaczyna się od samogłoski → an'},
+          {type:'fill',q:'I need ___ umbrella.',ans:'an',exp:'umbrella zaczyna się od "u" → an'},
+          {type:'mcq',q:'He drives ___ old car.',opts:['a','an','the','–'],ans:1,exp:'"old" zaczyna się od "o" → an old car'},
+          {type:'fill',q:'She works in ___ hospital.',ans:'a',exp:'hospital: h jest wymawiane → a hospital'},
+          {type:'mcq',q:'It\'s ___ university in London.',opts:['a','an','the','–'],ans:0,exp:'"university" czytamy "juni" (spółgłoska) → a'},
+        ]
+      },
+      {
+        id:'art-def', title:'Przedimek the', xp:15,
+        theory:`<h3>Przedimek określony – the</h3>
+<p>Używamy <span class="highlight">the</span> gdy mówimy o czymś już znanych obu rozmówcom, lub gdy jest tylko jedna taka rzecz.</p>
+<div class="example-box"><div class="en">I saw a dog. The dog was friendly.</div><div class="pl">Widziałem psa. Ten pies był przyjazny. (już wiemy o którym)</div></div>
+<div class="example-box"><div class="en">The sun / the moon / the Earth</div><div class="pl">Jedyne w swoim rodzaju</div></div>
+<p><span class="highlight">The z:</span> rzekami (the Thames), górami (the Alps), oceanami, krajami w liczbie mnogiej (the USA)</p>
+<p><span class="highlight">Nie używamy the z:</span> imionami, miastami, kontynentami, językami, posiłkami (breakfast), sportem</p>`,
+        exercises:[
+          {type:'mcq',q:'___ Nile is the longest river.',opts:['A','An','The','–'],ans:2,exp:'Konkretna rzeka = the Nile'},
+          {type:'mcq',q:'I had ___ breakfast at 8.',opts:['a','an','the','–'],ans:3,exp:'Posiłki bez przedimka: breakfast (nie the)'},
+          {type:'fill',q:'She lives in ___ United States.',ans:'the',exp:'Kraje w l. mn. lub z "united/republic" → the'},
+          {type:'mcq',q:'Can you close ___ door, please?',opts:['a','an','the','–'],ans:2,exp:'Obaj wiemy o których drzwiach → the door'},
+          {type:'mcq',q:'I love ___ music.',opts:['a','an','the','–'],ans:3,exp:'Pojęcia ogólne bez przedimka: music (nie the)'},
+        ]
+      },
+    ]
+  },
+  {
+    id:'modals', icon:'💬', name:'Czasowniki modalne',
+    lessons:[
+      {
+        id:'can-could', title:'Can / Could', xp:20,
+        theory:`<h3>Can / Could – możliwość i umiejętność</h3>
+<div class="formula">can/could + V (forma podstawowa) – dla wszystkich osób</div>
+<p><span class="highlight">Can</span> = teraźniejszość: umiejętności, możliwości, prośby, pozwolenia</p>
+<div class="example-box"><div class="en">She can speak three languages.</div><div class="pl">Ona umie mówić w trzech językach.</div><div class="de">🇩🇪 Sie kann drei Sprachen sprechen.</div></div>
+<div class="example-box"><div class="en">Can I open the window?</div><div class="pl">Czy mogę otworzyć okno?</div><div class="de">🇩🇪 Darf ich das Fenster öffnen?</div></div>
+<p><span class="highlight">Could</span> = przeszłość lub grzeczniejsza prośba</p>
+<div class="example-box"><div class="en">I could swim when I was 5.</div><div class="pl">Umiałem pływać kiedy miałem 5 lat.</div><div class="de">🇩🇪 Ich konnte schwimmen, als ich 5 Jahre alt war.</div></div>
+<div class="example-box"><div class="en">Could you help me, please?</div><div class="pl">Czy mógłbyś mi pomóc? (grzecznie)</div></div>`,
+        exercises:[
+          {type:'mcq',q:'She ___ play piano very well.',opts:['can','cans','could to','is able'],ans:0,exp:'can + forma podstawowa (bez to)'},
+          {type:'fill',q:'___ you speak louder, please?',ans:'Could',exp:'Grzeczna prośba = Could you...?'},
+          {type:'mcq',q:'He ___ not swim when he was young.',opts:['can','could','was','did'],ans:1,exp:'Przeszłość = could not (couldn\'t)'},
+          {type:'fill',q:'___ I use your phone?',ans:'Can',exp:'Prośba o pozwolenie = Can I...?'},
+          {type:'mcq',q:'They ___ finish the project by Friday.',opts:["can't","won't","don't","haven't"],ans:0,exp:'cannot = can\'t (niemożliwość)'},
+        ]
+      },
+      {
+        id:'must-have', title:'Must / Have to', xp:20,
+        theory:`<h3>Must / Have to – obowiązek i konieczność</h3>
+<p><span class="highlight">Must</span> = wewnętrzne przekonanie, silny obowiązek, zakaz (must not)</p>
+<div class="example-box"><div class="en">You must stop smoking.</div><div class="pl">Musisz rzucić palenie. (silne przekonanie)</div></div>
+<div class="example-box"><div class="en">You mustn't park here. (zakaz!)</div><div class="pl">Nie wolno tu parkować.</div><div class="de">🇩🇪 Hier darf nicht geparkt werden.</div></div>
+<p><span class="highlight">Have to</span> = zewnętrzny obowiązek, reguły, przepisy</p>
+<div class="example-box"><div class="en">I have to work on Saturdays.</div><div class="pl">Muszę pracować w soboty. (mój szef wymaga)</div></div>
+<p><span class="highlight">Don't have to</span> = brak obowiązku (ale wolno!)</p>
+<div class="example-box"><div class="en">You don't have to come. (ale możesz jeśli chcesz)</div><div class="pl">Nie musisz przychodzić.</div><div class="de">🇩🇪 Du musst nicht kommen.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'You ___ wear a seatbelt. It\'s the law.',opts:['must','mustn\'t','don\'t have to','might'],ans:0,exp:'Przepis prawny = must/have to'},
+          {type:'fill',q:'You ___ (not/touch) that. It\'s dangerous.',ans:"mustn't",exp:'Zakaz = must not → mustn\'t'},
+          {type:'mcq',q:'It\'s Sunday – I ___ get up early.',opts:['must','mustn\'t','don\'t have to','should'],ans:2,exp:'Brak obowiązku = don\'t have to'},
+          {type:'fill',q:'She ___ (have to) finish the report today.',ans:'has to',exp:'Zewnętrzny obowiązek, 3. os = has to'},
+          {type:'mcq',q:'___ I bring anything to the party?',opts:['Must','Do I have to','Should I to','Am I must'],ans:1,exp:'Pytanie o obowiązek = Do I have to?'},
+        ]
+      },
+      {
+        id:'should', title:'Should / Ought to', xp:15,
+        theory:`<h3>Should / Ought to – rada i opinia</h3>
+<p>Używamy <span class="highlight">should</span> do wyrażania rad, zaleceń i opinii.</p>
+<div class="formula">should/shouldn't + V (forma podstawowa)</div>
+<div class="example-box"><div class="en">You should see a doctor.</div><div class="pl">Powinieneś pójść do lekarza.</div><div class="de">🇩🇪 Du solltest zum Arzt gehen.</div></div>
+<div class="example-box"><div class="en">You shouldn't eat so much sugar.</div><div class="pl">Nie powinieneś jeść tyle cukru.</div><div class="de">🇩🇪 Du solltest nicht so viel Zucker essen.</div></div>
+<p><span class="highlight">Ought to</span> = podobne do should, ale bardziej formalne i rzadsze</p>
+<div class="example-box"><div class="en">You ought to apologize.</div><div class="pl">Powinieneś przeprosić.</div><div class="de">🇩🇪 Du solltest dich entschuldigen.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'You look tired. You ___ get some sleep.',opts:['should','must','will','can'],ans:0,exp:'Rada = should'},
+          {type:'fill',q:'He ___ (not/drive) so fast.',ans:"shouldn't drive",exp:'Rada negatywna = shouldn\'t + V'},
+          {type:'mcq',q:'___ I call her back?',opts:['Should','Must','Will','Have'],ans:0,exp:'Pytanie o radę = Should I...?'},
+          {type:'fill',q:'You ___ be more careful next time.',ans:'should',exp:'Rada = should'},
+          {type:'mcq',q:'She ___ to work harder.',opts:['should','ought','must','shall'],ans:1,exp:'ought to = should (bardziej formalne)'},
+        ]
+      },
+    ]
+  },
+  {
+    id:'sentences', icon:'🗣️', name:'Budowa zdań',
+    lessons:[
+      {
+        id:'questions-yesno', title:'Pytania Yes/No', xp:20,
+        theory:`<h3>Pytania Yes/No</h3>
+<p>Pytania wymagające odpowiedzi "yes" lub "no" – <span class="highlight">inwersja: operator przed podmiotem</span>.</p>
+<div class="formula">Operator (be/do/have/modal) + podmiot + reszta?</div>
+<table>
+<tr><th>Czas</th><th>Operator</th><th>Przykład</th></tr>
+<tr><td>Pres. Simple</td><td>do/does</td><td>Do you like cats?</td></tr>
+<tr><td>Past Simple</td><td>did</td><td>Did she call?</td></tr>
+<tr><td>Pres. Cont.</td><td>am/is/are</td><td>Are they coming?</td></tr>
+<tr><td>Modalne</td><td>can/will/should</td><td>Can you swim?</td></tr>
+</table>
+<div class="example-box"><div class="en">Does he work here? – Yes, he does. / No, he doesn't.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'___ she like chocolate?',opts:['Do','Does','Is','Has'],ans:1,exp:'Present Simple, she → Does'},
+          {type:'fill',q:'___ they watching TV?',ans:'Are',exp:'Present Continuous → Are they...?'},
+          {type:'mcq',q:'___ you call me yesterday?',opts:['Do','Did','Have','Were'],ans:1,exp:'Past Simple → Did you...?'},
+          {type:'fill',q:'___ she speak German?',ans:'Does',exp:'Present Simple, she → Does she...?'},
+          {type:'mcq',q:'___ I have to wear a tie?',opts:['Must','Do','Should','Have'],ans:1,exp:'have to w pytaniu → Do I have to...?'},
+        ]
+      },
+      {
+        id:'negatives', title:'Zdania przeczące', xp:20,
+        theory:`<h3>Zdania przeczące – Negatives</h3>
+<table>
+<tr><th>Czas</th><th>Przeczenie</th><th>Przykład</th></tr>
+<tr><td>Present Simple</td><td>don't / doesn't</td><td>I don't know. She doesn't like it.</td></tr>
+<tr><td>Past Simple</td><td>didn't</td><td>He didn't come.</td></tr>
+<tr><td>Be</td><td>isn't / aren't / wasn't / weren't</td><td>She isn't here.</td></tr>
+<tr><td>Present Perfect</td><td>haven't / hasn't</td><td>I haven't finished.</td></tr>
+<tr><td>Modalne</td><td>can't, won't, shouldn't</td><td>You can't park here.</td></tr>
+</table>
+<p><span class="highlight">Ważne:</span> Po didn't/don't/doesn't zawsze forma podstawowa!</p>
+<div class="example-box"><div class="en">She didn't go (NIE: went) to school.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'I ___ understand this sentence.',opts:["don't","doesn't","didn't","am not"],ans:0,exp:'Present Simple, I → don\'t'},
+          {type:'fill',q:'She ___ (not/have) a car.',ans:"doesn't have",exp:'Present Simple, she → doesn\'t have (nie has!)'},
+          {type:'mcq',q:'They ___ at home yesterday.',opts:["weren't","aren't","don't","didn't"],ans:0,exp:'Past Simple z be → weren\'t'},
+          {type:'fill',q:'He ___ (not/call) me last night.',ans:"didn't call",exp:'Past Simple przeczenie → didn\'t + V podstawowa'},
+          {type:'mcq',q:'You ___ smoke here.',opts:["mustn't","don't must","aren't must","haven't"],ans:0,exp:'Zakaz = mustn\'t (modal + not)'},
+        ]
+      },
+      {
+        id:'conditionals', title:'Zdania warunkowe', xp:30,
+        theory:`<h3>Zdania warunkowe – Conditionals</h3>
+<p><span class="highlight">Zero Conditional</span> – fakty, prawa natury:</p>
+<div class="formula">If + Present Simple, Present Simple</div>
+<div class="example-box"><div class="en">If you heat water, it boils.</div><div class="pl">Jeśli podgrzejesz wodę, gotuje się.</div><div class="de">🇩🇪 Wenn man Wasser erhitzt, kocht es.</div></div>
+<p><span class="highlight">First Conditional</span> – realna możliwość w przyszłości:</p>
+<div class="formula">If + Present Simple, will + V</div>
+<div class="example-box"><div class="en">If it rains, I will stay home.</div><div class="pl">Jeśli będzie padać, zostanę w domu.</div><div class="de">🇩🇪 Wenn es regnet, bleibe ich zu Hause.</div></div>
+<p><span class="highlight">Second Conditional</span> – nierealny/hipotetyczny (teraź./przyszł.):</p>
+<div class="formula">If + Past Simple, would + V</div>
+<div class="example-box"><div class="en">If I had more money, I would travel the world.</div><div class="pl">Gdybym miał więcej pieniędzy, podróżowałbym po świecie.</div><div class="de">🇩🇪 Wenn ich mehr Geld hätte, würde ich die Welt bereisen.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'If I ___ rich, I would buy a yacht.',opts:['am','were','will be','have been'],ans:1,exp:'2nd Conditional = If + Past Simple (were dla wszystkich)'},
+          {type:'fill',q:'If it rains, we ___ (cancel) the match.',ans:'will cancel',exp:'1st Conditional: if + present, will + V'},
+          {type:'mcq',q:'If you heat ice, it ___.',opts:['will melt','melts','would melt','melted'],ans:1,exp:'Zero Conditional (fakt) = Present Simple + Present Simple'},
+          {type:'fill',q:'I ___ (call) you if I need help.',ans:'will call',exp:'1st Conditional: will + V w zdaniu głównym'},
+          {type:'mcq',q:'If she ___ harder, she would pass.',opts:['studies','studied','will study','has studied'],ans:1,exp:'2nd Conditional: if + Past Simple'},
+        ]
+      },
+    ]
+  },
+  {
+    id:'adjectives', icon:'🎨', name:'Przymiotniki i przysłówki',
+    lessons:[
+      {
+        id:'comparatives', title:'Stopniowanie przymiotników', xp:25,
+        theory:`<h3>Stopniowanie przymiotników – Comparatives & Superlatives</h3>
+<table>
+<tr><th>Rodzaj</th><th>Stopień równy</th><th>Wyższy</th><th>Najwyższy</th></tr>
+<tr><td>Krótkie (1 sylaba)</td><td>tall</td><td>taller (than)</td><td>the tallest</td></tr>
+<tr><td>Kończy na -y</td><td>happy</td><td>happier (than)</td><td>the happiest</td></tr>
+<tr><td>Długie (2+ sylaby)</td><td>beautiful</td><td>more beautiful</td><td>the most beautiful</td></tr>
+<tr><td>Nieregularne</td><td>good/bad/far</td><td>better/worse/farther</td><td>best/worst/farthest</td></tr>
+</table>
+<div class="formula">as + przymiotnik + as = tak samo ... jak</div>
+<div class="example-box"><div class="en">She is taller than her brother.</div><div class="pl">Jest wyższa niż jej brat.</div><div class="de">🇩🇪 Sie ist größer als ihr Bruder.</div></div>
+<div class="example-box"><div class="en">This is the most interesting book I've read.</div><div class="pl">To najciekawsza książka, jaką czytałem.</div><div class="de">🇩🇪 Das ist das interessanteste Buch, das ich je gelesen habe.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'She is ___ than her sister. (tall)',opts:['more tall','taller','tallest','most tall'],ans:1,exp:'Krótkie przymiotniki: + er → taller'},
+          {type:'fill',q:'This is ___ (good) film I have ever seen.',ans:'the best',exp:'Nieregularny: good → the best (najwyższy)'},
+          {type:'mcq',q:'He is ___ student in the class. (intelligent)',opts:['more intelligent','most intelligent','the most intelligent','intelligenter'],ans:2,exp:'Długie przymiotniki: the most + adj'},
+          {type:'fill',q:'Today is ___ (hot) than yesterday.',ans:'hotter',exp:'hot → double t + er = hotter'},
+          {type:'mcq',q:'She is not as ___ as him.',opts:['tall','taller','tallest','more tall'],ans:0,exp:'as...as = forma podstawowa przymiotnika'},
+        ]
+      },
+      {
+        id:'adverbs', title:'Przysłówki sposobu', xp:15,
+        theory:`<h3>Przysłówki sposobu – Adverbs of Manner</h3>
+<p>Przysłówki opisują <span class="highlight">jak coś jest wykonywane</span>. Zwykle tworzone przez dodanie <span class="highlight">-ly</span> do przymiotnika.</p>
+<table>
+<tr><th>Przymiotnik</th><th>Przysłówek</th></tr>
+<tr><td>quick</td><td>quickly</td></tr>
+<tr><td>careful</td><td>carefully</td></tr>
+<tr><td>happy</td><td>happily (y→i)</td></tr>
+<tr><td>good</td><td>well (nieregularny!)</td></tr>
+<tr><td>fast/hard/late</td><td>fast/hard/late (bez zmiany)</td></tr>
+</table>
+<div class="example-box"><div class="en">She speaks English fluently.</div><div class="pl">Ona mówi płynnie po angielsku.</div><div class="de">🇩🇪 Sie spricht fließend Englisch.</div></div>
+<p>Pozycja: zwykle <span class="highlight">po czasowniku/dopełnieniu</span>, nigdy między podmiotem a czasownikiem.</p>`,
+        exercises:[
+          {type:'fill',q:'She sings ___. (beautiful)',ans:'beautifully',exp:'beautiful → beautifully (-ly)'},
+          {type:'mcq',q:'He drives very ___.',opts:['careful','carefully','more careful','caring'],ans:1,exp:'Przysłówek po czasowniku = carefully'},
+          {type:'fill',q:'She speaks English ___. (good)',ans:'well',exp:'good → well (nieregularny przysłówek)'},
+          {type:'mcq',q:'They work very ___.',opts:['hard','hardly','hardness','harded'],ans:0,exp:'hard jako przysłówek = hard (bez -ly!)'},
+          {type:'fill',q:'He answered the question ___. (quick)',ans:'quickly',exp:'quick → quickly'},
+        ]
+      },
+    ]
+  },
+  {
+    id:'nouns', icon:'📦', name:'Rzeczowniki',
+    lessons:[
+      {
+        id:'plurals', title:'Liczba mnoga', xp:15,
+        theory:`<h3>Liczba mnoga – Plural Nouns</h3>
+<p><span class="highlight">Regularna:</span> dodajemy -s lub -es</p>
+<table>
+<tr><th>Zasada</th><th>Przykład</th></tr>
+<tr><td>Większość: +s</td><td>book → books, car → cars</td></tr>
+<tr><td>-s,-ss,-sh,-ch,-x,-z: +es</td><td>bus → buses, church → churches</td></tr>
+<tr><td>spółgłoska+y → -ies</td><td>city → cities, baby → babies</td></tr>
+<tr><td>-f/-fe → -ves</td><td>leaf → leaves, wife → wives</td></tr>
+</table>
+<p><span class="highlight">Nieregularna:</span></p>
+<table>
+<tr><td>man → men</td><td>woman → women</td></tr>
+<tr><td>child → children</td><td>tooth → teeth</td></tr>
+<tr><td>foot → feet</td><td>mouse → mice</td></tr>
+<tr><td>person → people</td><td>sheep → sheep</td></tr>
+</table>`,
+        exercises:[
+          {type:'fill',q:'One child, two ___.',ans:'children',exp:'child → children (nieregularna)'},
+          {type:'fill',q:'One city, three ___.',ans:'cities',exp:'city: spółgłoska + y → ies'},
+          {type:'mcq',q:'The ___ are playing in the park. (child)',opts:['childs','childrens','children','childre'],ans:2,exp:'child → children'},
+          {type:'fill',q:'One leaf, many ___.',ans:'leaves',exp:'leaf → leaves (f → ves)'},
+          {type:'mcq',q:'Two ___ walked into the room. (woman)',opts:['womans','women','womens','woman'],ans:1,exp:'woman → women (nieregularna)'},
+        ]
+      },
+      {
+        id:'countable', title:'Policzalne i niepoliczalne', xp:20,
+        theory:`<h3>Policzalne i niepoliczalne – Countable & Uncountable</h3>
+<p><span class="highlight">Policzalne (countable):</span> mają liczbę mnogą, możemy je liczyć</p>
+<div class="example-box"><div class="en">a book, two books / an apple, five apples</div></div>
+<p><span class="highlight">Niepoliczalne (uncountable):</span> brak liczby mnogiej, bez a/an</p>
+<div class="example-box"><div class="en">water, milk, rice, money, information, advice, news</div></div>
+<table>
+<tr><th></th><th>Policzalne</th><th>Niepoliczalne</th></tr>
+<tr><td>dużo</td><td>many</td><td>much</td></tr>
+<tr><td>trochę</td><td>a few</td><td>a little</td></tr>
+<tr><td>mało</td><td>few</td><td>little</td></tr>
+<tr><td>ile?</td><td>How many?</td><td>How much?</td></tr>
+</table>
+<div class="example-box"><div class="en">There isn't much milk left.<br>There aren't many eggs left.</div></div>`,
+        exercises:[
+          {type:'mcq',q:'How ___ water do you drink a day?',opts:['many','much','few','little'],ans:1,exp:'water = niepoliczalne → How much?'},
+          {type:'mcq',q:'There are ___ apples left.',opts:['much','little','few','a little'],ans:2,exp:'apples = policzalne → few (mało)'},
+          {type:'fill',q:'I don\'t have ___ money.',ans:'much',exp:'money = niepoliczalne → much'},
+          {type:'mcq',q:'She gave me ___ advice.',opts:['an','a','many','some'],ans:3,exp:'advice = niepoliczalne, bez a/an → some'},
+          {type:'fill',q:'There are too ___ cars on the road.',ans:'many',exp:'cars = policzalne → many'},
+        ]
+      },
+      {
+        id:'possessive-s', title:"Dopełniacz 's", xp:15,
+        theory:`<h3>Dopełniacz saksoński – Possessive 's</h3>
+<p>Używamy <span class="highlight">'s</span> do wyrażania przynależności.</p>
+<div class="formula">właściciel + 's + przedmiot</div>
+<div class="example-box"><div class="en">Tom's car = samochód Toma</div></div>
+<div class="example-box"><div class="en">the dog's bone = kość psa</div></div>
+<p><span class="highlight">Liczba mnoga na -s:</span> tylko apostrof</p>
+<div class="example-box"><div class="en">the students' books (książki studentów)</div></div>
+<p><span class="highlight">Nieregularna l. mnoga:</span> dodajemy 's</p>
+<div class="example-box"><div class="en">the children's toys (zabawki dzieci)</div></div>
+<p><span class="highlight">Alternatywa:</span> of (dla rzeczy)</p>
+<div class="example-box"><div class="en">the roof of the house (a nie the house's roof)</div></div>`,
+        exercises:[
+          {type:'fill',q:"It's ___ (Anna) birthday today.",ans:"Anna's",exp:'Anna + \'s = Anna\'s'},
+          {type:'mcq',q:'The ___ rooms are clean. (students)',opts:["student's","students'","students's","student"],ans:1,exp:'l. mnoga na -s → tylko apostrof po s'},
+          {type:'fill',q:"Where is ___ (my brother) phone?",ans:"my brother's",exp:'my brother + \'s'},
+          {type:'mcq',q:'The ___ toys are everywhere. (children)',opts:["children's","childrens'","childrens's","children"],ans:0,exp:'Nieregularna l. mnoga → dodajemy \'s: children\'s'},
+          {type:'fill',q:"I borrowed ___ (my friend) car.",ans:"my friend's",exp:'my friend + \'s'},
+        ]
+      },
+    ]
+  },
+];
+
+// ═══════════ HOME ═══════════
+function renderHome() {
+  updateStreak();
+  document.getElementById('streakNum').textContent = S.streak;
+  document.getElementById('totalXP').textContent = S.xp;
+  document.getElementById('wordsKnown').textContent = Object.keys(S.known).length;
+  document.getElementById('sentencesDone').textContent = S.sentCount;
+  document.getElementById('quizzesDone').textContent = S.quizCount;
+  const totalLessons = GRAMMAR.reduce((a,m)=>a+m.lessons.length,0);
+  const done = Object.keys(S.completedLessons).length;
+  document.getElementById('lessonsCompleted').textContent = done;
+  const pct = Math.round((Object.keys(S.known).length/1000*40 + done/totalLessons*60));
+  document.getElementById('overallPct').textContent = pct+'%';
+  document.getElementById('overallFill').style.width = pct+'%';
+  // home module list (mini)
+  const el = document.getElementById('homeModuleList');
+  el.innerHTML = GRAMMAR.map(m => {
+    const d = m.lessons.filter(l=>S.completedLessons[l.id]).length;
+    const pct = Math.round(d/m.lessons.length*100);
+    return `<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.05)" onclick="switchTab('grammar')">
+      <span style="font-size:1.4rem">${m.icon}</span>
+      <div style="flex:1">
+        <div style="font-size:.88rem;font-weight:700">${m.name}</div>
+        <div style="margin-top:4px;height:3px;background:var(--border);border-radius:2px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--accent2);border-radius:2px"></div></div>
+      </div>
+      <span style="font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted)">${d}/${m.lessons.length}</span>
+    </div>`;
+  }).join('');
+}
+
+function updateStreak() {
+  const today = new Date().toDateString();
+  if (S.lastDate !== today) {
+    const yesterday = new Date(Date.now()-86400000).toDateString();
+    if (S.lastDate === yesterday) S.streak++;
+    else if (S.lastDate !== today) S.streak = 1;
+    S.lastDate = today;
+    save();
+  }
+}
+
+// ═══════════ GRAMMAR ═══════════
+function renderGrammar() {
+  const list = document.getElementById('moduleList');
+  const totalLessons = GRAMMAR.reduce((a,m)=>a+m.lessons.length,0);
+  list.innerHTML = GRAMMAR.map(m => {
+    const done = m.lessons.filter(l=>S.completedLessons[l.id]).length;
+    const pct = Math.round(done/m.lessons.length*100);
+    return `<div class="module-card">
+      <div class="module-header" onclick="toggleModule('mod-${m.id}')">
+        <div class="module-icon">${m.icon}</div>
+        <div class="module-info">
+          <div class="module-name">${m.name}</div>
+          <div class="module-meta">${m.lessons.length} lekcji • ${done} ukończonych</div>
+          <div style="margin-top:5px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;width:120px"><div style="height:100%;width:${pct}%;background:var(--accent2);border-radius:2px"></div></div>
+        </div>
+        <div class="module-prog ${done===m.lessons.length?'done':''}">${done}/${m.lessons.length}</div>
+      </div>
+      <div class="module-lessons" id="mod-${m.id}">
+        ${m.lessons.map((l,i)=>{
+          const isDone = S.completedLessons[l.id];
+          const prevDone = i===0||S.completedLessons[m.lessons[i-1].id];
+          const status = isDone?'done':prevDone?'active':'locked';
+          return `<div class="lesson-row" onclick="openLesson('${m.id}','${l.id}')">
+            <div class="lesson-status ${status}">${isDone?'✓':status==='active'?'▶':'🔒'}</div>
+            <div class="lesson-title">${l.title}</div>
+            <div class="lesson-xp">+${l.xp} XP</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleModule(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+// ═══════════ LESSON ═══════════
+let currentLesson = null, exAnswers = {};
+
+function openLesson(moduleId, lessonId) {
+  const mod = GRAMMAR.find(m=>m.id===moduleId);
+  const lesson = mod?.lessons.find(l=>l.id===lessonId);
+  if (!lesson) return;
+  currentLesson = lesson;
+  exAnswers = {};
+
+  document.getElementById('lvTitle').textContent = lesson.title;
+  document.getElementById('lvModule').textContent = mod.name;
+  document.getElementById('lvXP').textContent = '+'+lesson.xp+' XP';
+
+  const content = document.getElementById('lvContent');
+  content.innerHTML = `
+    <div class="lv-intro">${lesson.theory}</div>
+    <div class="exercises-section">
+      <h3>Ćwiczenia</h3>
+      ${lesson.exercises.map((ex,i)=>renderExercise(ex,i)).join('')}
+    </div>
+    <div id="lvFinish" style="display:none" class="lv-finish">
+      <div style="font-size:3rem">🎉</div>
+      <h2>Lekcja ukończona!</h2>
+      <div class="finish-score"><span id="finishScore">0</span>/5</div>
+      <div class="xp-badge">⚡ +${lesson.xp} XP zdobyte</div>
+      <p id="finishMsg">Świetna robota!</p>
+      <button class="btn-primary" onclick="closelesson()" style="max-width:280px;margin:0 auto">← Wróć do listy</button>
+    </div>
+  `;
+
+  // Add audio buttons for examples
+  content.querySelectorAll('.example-box .en').forEach(el => {
+    const btn = document.createElement('button');
+    btn.className='audio-btn';btn.style.cssText='margin-top:5px;font-size:.65rem';
+    btn.innerHTML='🔊 wymów';btn.onclick=()=>speak(el.textContent.replace(/[A-Z]+:\s*/,''));
+    el.parentNode.insertBefore(btn,el.nextSibling);
+  });
+
+  document.getElementById('lessonView').classList.add('open');
+}
+
+function renderExercise(ex, i) {
+  if (ex.type==='mcq') {
+    return `<div class="exercise" id="ex-${i}">
+      <div class="ex-num">Ćwiczenie ${i+1}</div>
+      <div class="ex-question">${ex.q}</div>
+      <div class="ex-options">
+        ${ex.opts.map((o,j)=>`<button class="ex-option" onclick="selectMCQ(${i},${j},${ex.ans},'${escQ(ex.exp)}')">${o}</button>`).join('')}
+      </div>
+      <div class="ex-feedback" id="exfb-${i}"></div>
+    </div>`;
+  } else {
+    return `<div class="exercise" id="ex-${i}">
+      <div class="ex-num">Ćwiczenie ${i+1}</div>
+      <div class="ex-question">${ex.q}</div>
+      <input type="text" class="ex-input" id="exinp-${i}" placeholder="Wpisz odpowiedź..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')checkFill(${i},'${escQ(ex.ans)}','${escQ(ex.exp)}')">
+      <div class="ex-action ex-check-btn">
+        <button class="btn active" onclick="checkFill(${i},'${escQ(ex.ans)}','${escQ(ex.exp)}')">Sprawdź →</button>
+      </div>
+      <div class="ex-feedback" id="exfb-${i}"></div>
+    </div>`;
+  }
+}
+
+function escQ(s){ return (s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+function selectMCQ(exIdx, chosenIdx, correctIdx, exp) {
+  if (exAnswers[exIdx]!==undefined) return;
+  exAnswers[exIdx] = chosenIdx===correctIdx;
+  const opts = document.querySelectorAll(`#ex-${exIdx} .ex-option`);
+  opts.forEach((o,j)=>{
+    if(j===correctIdx) o.classList.add('correct');
+    else if(j===chosenIdx) o.classList.add('wrong');
+    o.style.pointerEvents='none';
+  });
+  const fb = document.getElementById('exfb-'+exIdx);
+  fb.className='ex-feedback '+(chosenIdx===correctIdx?'ok':'err');
+  fb.textContent=(chosenIdx===correctIdx?'✓ Dobrze! ':'✗ Błąd. ')+exp;
+  checkAllAnswered();
+}
+
+function checkFill(exIdx, correct, exp) {
+  if (exAnswers[exIdx]!==undefined) return;
+  const inp = document.getElementById('exinp-'+exIdx);
+  const user = inp.value.trim().toLowerCase();
+  const ok = user===correct.toLowerCase()||(user.length>2&&correct.toLowerCase().includes(user));
+  exAnswers[exIdx]=ok;
+  inp.className='ex-input '+(ok?'ok':'err');
+  inp.disabled=true;
+  const fb=document.getElementById('exfb-'+exIdx);
+  fb.className='ex-feedback '+(ok?'ok':'err');
+  fb.textContent=(ok?'✓ Dobrze! ':'✗ Błąd. Poprawna: '+correct+'. ')+exp;
+  checkAllAnswered();
+}
+
+function checkAllAnswered() {
+  const total = currentLesson.exercises.length;
+  if (Object.keys(exAnswers).length < total) return;
+  const score = Object.values(exAnswers).filter(Boolean).length;
+  setTimeout(()=>{
+    document.getElementById('finishScore').textContent=score;
+    document.getElementById('finishMsg').textContent=score>=4?'Znakomita robota! Lekcja opanowana!':score>=3?'Nieźle! Powtórz teorię jeśli coś było trudne.':'Wróć do teorii i spróbuj ponownie.';
+    document.getElementById('lvFinish').style.display='';
+    document.getElementById('lvFinish').scrollIntoView({behavior:'smooth'});
+    if(!S.completedLessons[currentLesson.id]){
+      S.completedLessons[currentLesson.id]={score,date:new Date().toISOString()};
+      S.xp+=currentLesson.xp;
+      save();
+    }
+    renderGrammar();
+  },500);
+}
+
+function closelesson() {
+  document.getElementById('lessonView').classList.remove('open');
+  renderGrammar();
+  renderHome();
+}
+
+// ═══════════ VOCAB ═══════════
+const cats = ['Wszystkie',...new Set(words.map(w=>w.cat))].sort((a,b)=>a==='Wszystkie'?-1:b==='Wszystkie'?1:a.localeCompare(b,'pl'));
+let vCat='Wszystkie', vFilter='all';
+
+function buildCatBar(){
+  const bar=document.getElementById('catScroller');
+  bar.innerHTML=cats.map(c=>`<button class="cat-chip ${c===vCat?'active':''}" onclick="setVCat('${c}')">${c}</button>`).join('');
+}
+function setVCat(c){vCat=c;buildCatBar();renderGrid();}
+function toggleVFilter(f,el){
+  vFilter=vFilter===f?'all':f;
+  document.getElementById('vfKnown').classList.toggle('active',vFilter==='known');
+  document.getElementById('vfUnknown').classList.toggle('active',vFilter==='unknown');
+  renderGrid();
+}
+function resetWords(){if(confirm('Resetować oznaczenia?')){S.known={};S.unknown={};save();renderGrid();}}
+
+function getFiltered(){
+  let list=words;
+  const q=document.getElementById('vocabSearch').value.trim().toLowerCase();
+  if(vCat!=='Wszystkie')list=list.filter(w=>w.cat===vCat);
+  if(q)list=list.filter(w=>w.en.toLowerCase().includes(q)||w.pl.toLowerCase().includes(q));
+  if(vFilter==='known')list=list.filter(w=>S.known[w.n]);
+  if(vFilter==='unknown')list=list.filter(w=>S.unknown[w.n]);
+  return list;
+}
+
+function renderGrid(){
+  const grid=document.getElementById('wordGrid');
+  const list=getFiltered();
+  document.getElementById('vocabStats').textContent=`${list.length} słów • ✅${Object.keys(S.known).length} znam • ❌${Object.keys(S.unknown).length} uczę się`;
+  document.getElementById('noResults').style.display=list.length?'none':'block';
+  grid.innerHTML=list.map(w=>{
+    const cls=S.known[w.n]?'known':S.unknown[w.n]?'unknown':'';
+    return `<div class="word-card ${cls}" onclick="toggleWord(${w.n})">
+      ${cls?'<div class="sdot"></div>':''}
+      <div class="wc-num">#${w.n}</div>
+      <div class="wc-en"><span>${w.en}</span><button class="spk" onclick="event.stopPropagation();speak('${w.en}')">🔊</button></div>
+      <div class="wc-pl" style="margin-bottom:2px"><span style="font-size:.6rem;color:var(--muted2);font-family:'Space Mono',monospace">PL</span> ${w.pl}</div>
+      <div class="wc-pl"><span style="font-size:.6rem;color:rgba(74,127,165,.7);font-family:'Space Mono',monospace">DE</span> <span style="color:var(--accent3)">${w.de||''}</span></div>
+      <div class="wc-cat">${w.cat}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleWord(n){
+  if(S.known[n]){delete S.known[n];S.unknown[n]=1;}
+  else if(S.unknown[n]){delete S.unknown[n];}
+  else{S.known[n]=1;}
+  save();renderGrid();
+}
+document.getElementById('vocabSearch').addEventListener('input',renderGrid);
+
+// ═══════════ QUIZ ═══════════
+const qSetup={mode:'type',dir:'en-pl',pool:'all',count:'20'};
+let qList=[],qIdx=0,qGood=0,qBad=0,qDir='en-pl',qAwait=false,qCurDir='en-pl';
+
+function setQOpt(k,v,el){
+  qSetup[k]=v;
+  el.closest('.setup-opts').querySelectorAll('.setup-opt').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function startQuiz(){
+  let pool=qSetup.pool==='unknown'?words.filter(w=>S.unknown[w.n]||(!S.known[w.n]&&!S.unknown[w.n])):[...words];
+  if(!pool.length)pool=[...words];
+  pool.sort(()=>Math.random()-.5);
+  if(qSetup.count!=='all')pool=pool.slice(0,+qSetup.count);
+  qList=pool;qIdx=0;qGood=0;qBad=0;qDir=qSetup.dir;qAwait=false;
+  document.getElementById('quizSetup').style.display='none';
+  document.getElementById('quizResult').classList.remove('show');
+  document.getElementById('quizActive').classList.add('show');
+  document.getElementById('qTypeUI').style.display=qSetup.mode==='type'?'':'none';
+  document.getElementById('qFlipUI').style.display=qSetup.mode==='flip'?'':'none';
+  updQS();showQCard();
+}
+
+function endQuiz(){document.getElementById('quizActive').classList.remove('show');document.getElementById('quizSetup').style.display='';}
+function resetQuiz(){document.getElementById('quizResult').classList.remove('show');document.getElementById('quizSetup').style.display='';}
+
+function showQCard(){
+  if(qIdx>=qList.length){showQRes();return;}
+  const w=qList[qIdx];
+  const dirs=['en-pl','pl-en','en-de','de-en'];
+  if(qDir==='mix') qCurDir=dirs[Math.floor(Math.random()*4)];
+  else qCurDir=qDir;
+  let question='', badge='';
+  if(qCurDir==='en-pl'){question=w.en;badge='🇬🇧 angielski → podaj po polsku';}
+  else if(qCurDir==='pl-en'){question=w.pl.split(',')[0];badge='🇵🇱 polski → podaj po angielsku';}
+  else if(qCurDir==='en-de'){question=w.en;badge='🇬🇧 angielski → podaj po niemiecku';}
+  else{question=(w.de||w.en).split(',')[0];badge='🇩🇪 niemiecki → podaj po angielsku';}
+  document.getElementById('qWordTxt').textContent=question;
+  document.getElementById('qBadge').textContent=badge;
+  document.getElementById('qProg').textContent=`${qIdx+1}/${qList.length}`;
+  document.getElementById('qPFill').style.width=(qIdx/qList.length*100)+'%';
+  if(qSetup.mode==='type'){
+    const inp=document.getElementById('qInp');
+    inp.value='';inp.className='q-inp';inp.disabled=false;
+    document.getElementById('qFb').textContent='';document.getElementById('qFb').className='q-fb';
+    document.getElementById('qCorrectTxt').innerHTML='';
+    document.getElementById('qCheckBtn').textContent='Sprawdź →';
+    qAwait=false;setTimeout(()=>inp.focus(),50);
+  }else{document.getElementById('qFlipAns').textContent='';}
+}
+
+function qSpeak(){const w=qList[qIdx];speak(w.en,'en-US');}
+
+function normQ(s){return s.toLowerCase().split(/[,\/\(]/)[0].trim();}
+function getCorrect(w,dir){
+  if(dir==='en-pl') return w.pl;
+  if(dir==='pl-en') return w.en;
+  if(dir==='en-de') return w.de||w.en;
+  if(dir==='de-en') return w.en;
+  return w.pl;
+}
+
+function qCheck(){
+  if(qAwait){qIdx++;showQCard();return;}
+  const w=qList[qIdx];const inp=document.getElementById('qInp');
+  const user=inp.value.trim();if(!user)return;
+  const correct=getCorrect(w,qCurDir);
+  const uN=normQ(user);
+  const ok=correct.split(/[,\/]/).map(v=>normQ(v.split('(')[0])).some(v=>v===uN||(v.length>3&&uN.length>3&&(v.includes(uN)||uN.includes(v))));
+  inp.className='q-inp '+(ok?'ok':'err');
+  const fb=document.getElementById('qFb');fb.className='q-fb '+(ok?'ok':'err');
+  fb.textContent=ok?'✓ Dobrze!':'✗ Błąd';
+  if(!ok){
+    const hint=qCurDir==='en-de'?`· PL: ${w.pl}`:qCurDir==='de-en'?`· PL: ${w.pl}`:qCurDir==='pl-en'?`· DE: ${w.de||''}`:` · DE: ${w.de||''}`;
+    document.getElementById('qCorrectTxt').innerHTML=`Poprawna: <b>${correct}</b> <span style="color:var(--muted);font-size:.7rem">${hint}</span>`;
+  } else { document.getElementById('qCorrectTxt').innerHTML=''; }
+  if(ok){qGood++;S.known[w.n]=1;delete S.unknown[w.n];}
+  else{qBad++;S.unknown[w.n]=1;delete S.known[w.n];}
+  if(qCurDir==='en-pl'||qCurDir==='en-de')speak(w.en);
+  save();updQS();qAwait=true;document.getElementById('qCheckBtn').textContent='Następne →';
+}
+
+function qSkip(){
+  const w=qList[qIdx];const correct=getCorrect(w,qCurDir);
+  document.getElementById('qInp').className='q-inp err';
+  document.getElementById('qFb').textContent='— Pominięto';document.getElementById('qFb').className='q-fb err';
+  document.getElementById('qCorrectTxt').innerHTML=`Poprawna: <b>${correct}</b>`;
+  qBad++;S.unknown[w.n]=1;delete S.known[w.n];save();updQS();
+  qAwait=true;document.getElementById('qCheckBtn').textContent='Następne →';
+}
+
+function qFlipShow(){
+  const w=qList[qIdx];
+  const ans=getCorrect(w,qCurDir);
+  const extra=qCurDir==='en-pl'?` | DE: ${w.de||''}`:qCurDir==='en-de'?` | PL: ${w.pl}`:qCurDir==='de-en'?` | PL: ${w.pl}`:` | DE: ${w.de||''}`;
+  document.getElementById('qFlipAns').innerHTML=`${ans}<div style="font-size:.8rem;color:var(--muted);margin-top:4px">${extra}</div>`;
+  if(qCurDir==='pl-en'||qCurDir==='de-en')speak(w.en);
+}
+function qFlipMark(ok){
+  const w=qList[qIdx];
+  if(ok){qGood++;S.known[w.n]=1;delete S.unknown[w.n];}
+  else{qBad++;S.unknown[w.n]=1;delete S.known[w.n];}
+  save();updQS();qIdx++;showQCard();
+}
+
+function updQS(){document.getElementById('qG').textContent=qGood;document.getElementById('qB').textContent=qBad;}
+function showQRes(){
+  document.getElementById('quizActive').classList.remove('show');
+  const r=document.getElementById('quizResult');r.classList.add('show');
+  const t=qGood+qBad,p=t?Math.round(qGood/t*100):0;
+  document.getElementById('qrG').textContent=qGood;document.getElementById('qrB').textContent=qBad;document.getElementById('qrP').textContent=p+'%';
+  document.getElementById('qrEmoji').textContent=p>=80?'🎉':p>=50?'👍':'💪';
+  document.getElementById('qrTitle').textContent=p>=80?'Świetny wynik!':p>=50?'Nieźle!':'Ćwicz więcej!';
+  document.getElementById('qrSub').textContent=`${qGood} poprawnych z ${t}`;
+  S.quizCount++;save();renderHome();
+}
+
+document.getElementById('qInp').addEventListener('keydown',e=>{if(e.key==='Enter')qCheck();});
+
+// ═══════════ SENTENCES ═══════════
+let sentData=null,sentHintLvl=0,sentHistory=[];
+
+function randWord(){
+  const pool=words.filter(w=>w.cat!=='Podstawowe'&&w.en.length>2);
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+async function genSentence(){
+  const level=document.getElementById('sentLevel').value;
+  const w=randWord();
+  sentData=null;sentHintLvl=0;
+  document.getElementById('sentEmpty').style.display='none';
+  document.getElementById('sentCardWrap').style.display='none';
+  document.getElementById('sentLoading').style.display='';
+  document.getElementById('sentFb').className='sent-fb';
+  document.getElementById('sInput').value='';
+  document.getElementById('sInput').className='sent-textarea';
+  document.getElementById('hintRow').style.display='none';
+  document.getElementById('sentSpkBtn').style.display='none';
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:300,
+        messages:[{role:'user',content:`You are an English teacher. Create a Polish sentence using the concept "${w.en}" (Polish: ${w.pl}) for CEFR level ${level}. Respond ONLY with JSON (no markdown): {"polish":"<Polish sentence>","english":"<English translation>","word":"${w.en}"}`}]
+      })
+    });
+    const data=await res.json();
+    const txt=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+    const parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    sentData={...parsed,wordObj:w};
+    document.getElementById('sentLoading').style.display='none';
+    document.getElementById('sentCardWrap').style.display='';
+    document.getElementById('sWord').textContent=parsed.word;
+    document.getElementById('sWordPl').textContent=w.pl.split(',')[0].trim();
+    document.getElementById('sTransl').textContent=parsed.polish;
+    document.getElementById('sInput').focus();
+  }catch(e){
+    document.getElementById('sentLoading').style.display='none';
+    document.getElementById('sentEmpty').style.display='';
+    document.getElementById('sentEmpty').textContent='Błąd generowania. Spróbuj ponownie.';
+  }
+}
+
+async function checkSentence(){
+  if(!sentData)return;
+  const user=document.getElementById('sInput').value.trim();
+  if(!user)return;
+  const fb=document.getElementById('sentFb');
+  fb.className='sent-fb show';
+  fb.innerHTML=`<div style="text-align:center;padding:8px"><div class="loading-dots" style="justify-content:center"><span></span><span></span><span></span></div></div>`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:250,
+        messages:[{role:'user',content:`Grade this English translation. Polish: "${sentData.polish}" Reference: "${sentData.english}" Student: "${user}". Be lenient if meaning is correct. Respond ONLY with JSON: {"correct":true/false,"score":0-100,"feedback_pl":"<2 sentences Polish feedback>","corrected":"<corrected sentence or empty>"}`}]
+      })
+    });
+    const data=await res.json();
+    const parsed=JSON.parse(data.content.filter(b=>b.type==='text').map(b=>b.text).join('').replace(/```json|```/g,'').trim());
+    const ok=parsed.correct||parsed.score>=70;
+    document.getElementById('sInput').className='sent-textarea '+(ok?'ok':'err');
+    const corrected=parsed.corrected||sentData.english;
+    fb.innerHTML=ok
+      ?`<div class="fb-ok">✓ DOBRZE! (${parsed.score}%)</div><div>${parsed.feedback_pl}</div><div class="fb-correct">📝 ${sentData.english}</div>`
+      :`<div class="fb-err">✗ BŁĄD (${parsed.score}%)</div><div>${parsed.feedback_pl}</div><div class="fb-correct">✅ Poprawne: <b>${corrected}</b></div>`;
+    document.getElementById('sentSpkBtn').style.display='';
+    sentHistory.unshift({word:sentData.word,polish:sentData.polish,english:sentData.english,user,ok,score:parsed.score});
+    S.sentCount++;save();renderHistory();renderHome();
+  }catch(e){
+    fb.innerHTML=`<div class="fb-err">Błąd sprawdzania</div>`;
+  }
+}
+
+function sentReveal(){
+  if(!sentData)return;
+  const fb=document.getElementById('sentFb');
+  fb.className='sent-fb show';
+  fb.innerHTML=`<div class="fb-ok">👁 POPRAWNA ODPOWIEDŹ:</div><div class="fb-correct">${sentData.english}</div>`;
+  document.getElementById('sentSpkBtn').style.display='';
+}
+
+function sentHint(){
+  if(!sentData)return;
+  sentHintLvl++;
+  const ws=sentData.english.split(' ');
+  let h='';
+  if(sentHintLvl===1)h=`Pierwsze słowo: <b>${ws[0]}</b>`;
+  else if(sentHintLvl===2)h=`${ws.length} słów. Inicjały: <b>${ws.map(w=>w[0]).join(' ')}</b>`;
+  else h=`Pierwsza połowa: <b>${ws.slice(0,Math.ceil(ws.length/2)).join(' ')}...</b>`;
+  const hr=document.getElementById('hintRow');
+  hr.innerHTML='💡 '+h;hr.style.display='';
+}
+
+function renderHistory(){
+  const hs=document.getElementById('histSection');
+  const hl=document.getElementById('histList');
+  if(!sentHistory.length){hs.style.display='none';return;}
+  hs.style.display='';
+  hl.innerHTML=sentHistory.slice(0,8).map(h=>`
+    <div class="hist-item ${h.ok?'h-ok':'h-err'}">
+      <div class="hw">${h.word}</div>
+      <div class="hs">${h.polish}</div>
+      <div class="hr">${h.ok?'✓':'✗'} ${h.score}% — "${h.user}"</div>
+    </div>`).join('');
+}
+
+// ═══════════ INIT ═══════════
+updateStreak();
+renderHome();
+renderGrammar();
+buildCatBar();
+renderGrid();
+</script>
+</body>
+</html>
